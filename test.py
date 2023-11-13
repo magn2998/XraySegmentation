@@ -222,7 +222,7 @@ def plot_img_array(img_array, ncol=3):
         plots[i // ncol, i % ncol]
         plots[i // ncol, i % ncol].imshow(imgArray, cmap='gray')
 
-    plt.savefig('pictures.png')
+    plt.savefig('./images/pictures.png')
     
     
 
