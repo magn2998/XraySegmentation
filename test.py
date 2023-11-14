@@ -1,11 +1,8 @@
-import matplotlib_terminal
 import matplotlib.pyplot as plt
 import numpy as np
-import random
 from functools import reduce
-import itertools
 from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, datasets, models
+from torchvision import transforms
 from torchvision.transforms.functional import crop
 from collections import defaultdict
 import torch.nn.functional as F
@@ -22,10 +19,12 @@ import os
 
 # Global Variables
 batch_size = 5
+IMG_HEIGHT = 400
+IMG_WIDTH = 400
 
 # To Crop Images
 def crop800(image):
-    return crop(image, 0, 0, 192, 192)
+    return crop(image, 0, 0, IMG_HEIGHT, IMG_WIDTH)
 
 # Thanks to: https://pyimagesearch.com/2021/11/08/u-net-training-image-segmentation-models-in-pytorch/
 class SegmentationDataset(Dataset):
@@ -57,7 +56,7 @@ class SegmentationDataset(Dataset):
             whitemask = self.transforms(whitemask)
         # return a tuple of the image and its mask
         
-        total_mask = torch.zeros((3,192,192))
+        total_mask = torch.zeros((3,IMG_HEIGHT,IMG_WIDTH))
         total_mask[0] = blackmask
         total_mask[1] = greymask
         total_mask[2] = whitemask
@@ -106,18 +105,20 @@ def plot_img_array(img_array, ncol=3):
     f, plots = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 4, nrow * 4))
 
     for i in range(len(img_array)):
-        imgArray = img_array[i].transpose(1,2,0) # Reshape to match (H,W,C) from (C,H,W)
-        plots[i // ncol, i % ncol]
-        plots[i // ncol, i % ncol].imshow(imgArray, cmap='gray')
+        for o in range(len(img_array[i])):
+            imgArray = img_array[i][o].transpose(1,2,0) # Reshape to match (H,W,C) from (C,H,W)
+            plots[i // ncol, i % ncol]
+            plots[i // ncol, i % ncol].imshow(imgArray, cmap='gray')
 
     plt.savefig('./images/pictures_new.png')
     
 
 
 def plot_side_by_side(img_arrays):
-    flatten_list = reduce(lambda x,y: x+y, zip(*img_arrays))
-
-    plot_img_array(np.array(flatten_list), ncol=len(img_arrays))
+    # print(img_arrays)
+    # flatten_list = reduce(lambda x,y: x+y, zip(*img_arrays))
+    # print(flatten_list.shape)
+    plot_img_array(img_arrays, ncol=len(img_arrays))
 
 
 
@@ -146,7 +147,8 @@ def dice_loss(pred, target, smooth=1.):
 def calc_loss(pred, target, metrics, bce_weight=0.5):
     bce = F.binary_cross_entropy_with_logits(pred, target)
 
-    pred = torch.sigmoid(pred)
+    # pred = torch.sigmoid(pred)
+    pred = torch.softmax(pred, dim=1)
     dice = dice_loss(pred, target)
 
     loss = bce * bce_weight + dice * (1 - bce_weight)
@@ -181,7 +183,6 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
-                scheduler.step()
                 for param_group in optimizer.param_groups:
                     print("LR", param_group['lr'])
 
@@ -209,6 +210,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                     if phase == 'train':
                         loss.backward()
                         optimizer.step()
+                        scheduler.step() # Update Learning Rate
 
                 # statistics
                 epoch_samples += inputs.size(0)
@@ -235,6 +237,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
 def run(UNet):
     num_class = 3
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print("Device Used: " + str(device))
 
     model = UNet(num_class).to(device)
 
@@ -242,7 +245,7 @@ def run(UNet):
 
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=30, gamma=1.0)
 
-    model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=20)
+    model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=50)
 
     model.eval()  # Set model to the evaluation mode
 
@@ -259,7 +262,8 @@ def run(UNet):
     # Predict
     pred = model(inputs)
     # The loss functions include the sigmoid function.
-    pred = torch.sigmoid(pred)
+    # pred = torch.sigmoid(pred)
+    pred = torch.softmax(pred, dim=1)
     pred = pred.data.cpu().numpy()
     print(pred.shape)
 
@@ -270,4 +274,23 @@ def run(UNet):
     # target_masks_rgb = [masks_to_colorimg(x) for x in labels.cpu().numpy()]
     # pred_rgb = [masks_to_colorimg(x) for x in pred]
 
-    plot_side_by_side([inputs.cpu().numpy(),  labels.cpu().numpy(), pred])
+    # plot_side_by_side([inputs.cpu().numpy(),  labels.cpu().numpy(), pred])
+
+    images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred]
+
+    nrow = pred.shape[0]
+    ncol = len(images)
+    # Create a 5x3 subplot grid
+    fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 4, nrow * 4)) # Adjust figsize as needed
+    for i in range(3):  # For each of the 3 pictures
+        for j in range(5):  # For each of the 5 versions
+            ax = axs[j, i]
+            img = images[i][j]  # Access the image; images should be a 3D array: [channel, height, width]
+            ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
+
+    plt.tight_layout()
+    plt.show()
+    plt.savefig('./images/pictures_new.png')
+
+    # Save the model!
+    torch.save(model.state_dict(), "./data/model.pt")
