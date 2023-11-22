@@ -16,11 +16,13 @@ from imutils import paths
 import cv2
 import sys
 import os
+import datetime
 
 # Global Variables
 batch_size = 5
 IMG_HEIGHT = 400
 IMG_WIDTH = 400
+EPOCHS = 1
 
 # To Crop Images
 def crop800(image):
@@ -110,7 +112,7 @@ def plot_img_array(img_array, ncol=3):
             plots[i // ncol, i % ncol]
             plots[i // ncol, i % ncol].imshow(imgArray, cmap='gray')
 
-    plt.savefig('./images/pictures_new.png')
+    plt.savefig('./images/pictures_newBN.png')
     
 
 
@@ -245,7 +247,7 @@ def run(UNet):
 
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=30, gamma=1.0)
 
-    model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=50)
+    model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=EPOCHS)
 
     model.eval()  # Set model to the evaluation mode
 
@@ -276,21 +278,34 @@ def run(UNet):
 
     # plot_side_by_side([inputs.cpu().numpy(),  labels.cpu().numpy(), pred])
 
-    images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred]
+
+    #Subtract images pred - labels 
+    # Assuming labels and pred have the same shape
+    difference = np.abs(labels.cpu().numpy() - pred)
+    
+    # Normalize the difference values to be in the range [0, 1]
+    images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred, difference]
 
     nrow = pred.shape[0]
     ncol = len(images)
     # Create a 5x3 subplot grid
-    fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 4, nrow * 4)) # Adjust figsize as needed
-    for i in range(3):  # For each of the 3 pictures
+    fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 5, nrow * 5)) # Adjust figsize as needed
+    for i in range(len(images)):  # For each of the 4 pictures
         for j in range(5):  # For each of the 5 versions
             ax = axs[j, i]
             img = images[i][j]  # Access the image; images should be a 3D array: [channel, height, width]
-            ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
+            if i == ncol - 1:  # Use a different colormap for the difference plot
+                im = ax.imshow(img.transpose(1, 2, 0), cmap="viridis")
+                cbar = fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
+                cbar.ax.tick_params(labelsize=8)  # Adjust font size of the color bar ticks
+            else:
+                ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
 
     plt.tight_layout()
     plt.show()
-    plt.savefig('./images/pictures_new.png')
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    filename = f'./images/pictures_{timestamp}.png'
+    plt.savefig(filename)
 
     # Save the model!
     torch.save(model.state_dict(), "./data/model.pt")
