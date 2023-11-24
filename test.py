@@ -7,6 +7,7 @@ from torchvision.transforms.functional import crop
 from collections import defaultdict
 import torch.nn.functional as F
 import torch.nn as nn
+import torch.nn as nn
 import torch
 import torch.optim as optim
 from torch.optim import lr_scheduler
@@ -62,7 +63,15 @@ class SegmentationDataset(Dataset):
         img_name = os.path.basename(imagePath)
         name = os.path.basename(maskPath)
 
+        img_name = os.path.basename(imagePath)
+        name = os.path.basename(maskPath)
+
         image = cv2.imread(imagePath, 0) # Read as grayscaled 
+        blackmask = cv2.imread("./data/split_masks/black/"+name, 0) 
+        greymask  = cv2.imread("./data/split_masks/grey/" +name, 0) 
+        whitemask = cv2.imread("./data/split_masks/white/"+name, 0) 
+
+
         blackmask = cv2.imread("./data/split_masks/black/"+name, 0) 
         greymask  = cv2.imread("./data/split_masks/grey/" +name, 0) 
         whitemask = cv2.imread("./data/split_masks/white/"+name, 0) 
@@ -78,6 +87,13 @@ class SegmentationDataset(Dataset):
             actual_width = image.shape[1]
             crop_x = random.randint(0, actual_width  - IMG_WIDTH  - 1)
             crop_y = random.randint(0, actual_height - IMG_HEIGHT - 1)
+            # Setup Global Variables used for cropping
+            global crop_x, crop_y
+            #  Compute Random Cropping
+            actual_height = image.shape[0]
+            actual_width = image.shape[1]
+            crop_x = random.randint(0, actual_width  - IMG_WIDTH  - 1)
+            crop_y = random.randint(0, actual_height - IMG_HEIGHT - 1)
             # apply the transformations to both image and its mask
             image = self.transforms(image)
             blackmask = self.transforms(blackmask)
@@ -85,11 +101,13 @@ class SegmentationDataset(Dataset):
             whitemask = self.transforms(whitemask)
         
         # return a tuple of the image and its masks
+        # return a tuple of the image and its masks
         total_mask = torch.zeros((3,IMG_HEIGHT,IMG_WIDTH))
         total_mask[0] = blackmask
         total_mask[1] = greymask
         total_mask[2] = whitemask
 
+        return (image, total_mask, img_name)
         return (image, total_mask, img_name)
 
 # load the image and mask filepaths in a sorted manner
@@ -105,6 +123,7 @@ split = train_test_split(imagePaths, maskPaths,
 
 
 transforms = transforms.Compose([transforms.ToPILImage(),
+    transforms.Lambda(crop_rnd),
     transforms.Lambda(crop_rnd),
     transforms.ToTensor()])
 
@@ -131,7 +150,6 @@ def get_data_loaders():
 
     return dataloaders
 
-
 def dice_loss(pred, target):
     pred = pred.contiguous()
     target = target.contiguous()
@@ -151,12 +169,32 @@ def IoU_loss(pred, target):
     union = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) - intersection;
     
     IoU = intersection/union
+    total_sum = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2);
+    
+    dice = 2.0*intersection/total_sum
 
+    return (1 - dice).mean();
+
+def IoU_loss(pred, target):
+    pred = pred.contiguous()
+    target = target.contiguous()
+
+    intersection = (pred * target).sum(dim=2).sum(dim=2)
+    union = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) - intersection;
+    
+    IoU = intersection/union
+
+    return (1 - IoU).mean();
     return (1 - IoU).mean();
 
 
 def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     cce = criterion(pred, target)
+def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
+    cce = criterion(pred, target)
+
+    SoftMaxFunc = nn.Softmax2d()
+    pred = SoftMaxFunc(pred)
 
     SoftMaxFunc = nn.Softmax2d()
     pred = SoftMaxFunc(pred)
@@ -164,9 +202,13 @@ def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     dice = dice_loss(pred, target)
     # IoU = IoU_loss(pred, target)
     # print(IoU)
+    # IoU = IoU_loss(pred, target)
+    # print(IoU)
 
     loss = cce * bce_weight + dice * (1 - bce_weight)
+    loss = cce * bce_weight + dice * (1 - bce_weight)
 
+    metrics['cce'] += cce.data.cpu().numpy() * target.size(0)
     metrics['cce'] += cce.data.cpu().numpy() * target.size(0)
     metrics['dice'] += dice.data.cpu().numpy() * target.size(0)
     metrics['loss'] += loss.data.cpu().numpy() * target.size(0)
@@ -192,6 +234,11 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
     # Early Stopping Variables
     counter = 0
     tolerance = 5
+    criterion = nn.CrossEntropyLoss()
+
+    # Early Stopping Variables
+    counter = 0
+    tolerance = 5
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch+1, num_epochs)) #Reformatted to make it more readable in console
@@ -212,7 +259,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
             metrics = defaultdict(float)
             epoch_samples = 0
 
-            for inputs, labels, _ in dataloaders[phase]:
+            for inputs, labels, _, _ in dataloaders[phase]:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -223,7 +270,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
-                    loss = calc_loss(outputs, labels, metrics, criterion)
+                    loss = calc_loss(outputs, labels, metrics, criterion, criterion)
 
                     # backward + optimize only if in training phase
                     if phase == 'train':
@@ -242,6 +289,19 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                 print("saving best model")
                 best_loss = epoch_loss
                 best_model_wts = copy.deepcopy(model.state_dict())
+                counter = 0
+            elif phase == 'val':
+                # Implementation of Early Stopping
+                # Criteria: If no improvement of validation was made in 4 epocs
+                counter = counter + 1
+                if counter > tolerance:
+                    print("No improvements seen in " + str(tolerance) + " epochs. Initiating Early Stopping.")
+                    print('Best val loss: {:4f}'.format(best_loss))
+                    model.load_state_dict(best_model_wts) # Load and return best model
+                    return model
+            
+            
+
                 counter = 0
             elif phase == 'val':
                 # Implementation of Early Stopping
@@ -279,10 +339,16 @@ def run(UNet):
 
     model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=EPOCHS)
 
+    model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=EPOCHS)
 
+
+    # Finish up and plot results
     # Finish up and plot results
     model.eval()  # Set model to the evaluation mode
 
+    global crop_v
+    crop_v = False # Start at (0,0) for cropping
+    inputs, labels, img_names = next(iter(test_loader))
     global crop_v
     crop_v = False # Start at (0,0) for cropping
     inputs, labels, img_names = next(iter(test_loader))
@@ -291,6 +357,8 @@ def run(UNet):
 
     # Predict
     pred = model(inputs)
+    SoftMaxFunc = nn.Softmax2d()
+    pred = SoftMaxFunc(pred)
     SoftMaxFunc = nn.Softmax2d()
     pred = SoftMaxFunc(pred)
     pred = pred.data.cpu().numpy()
