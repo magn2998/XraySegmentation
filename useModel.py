@@ -19,10 +19,10 @@ import os
 import Unet
 
 imagePath = "./data/difficultData/Slice_ 1316.png"
-modelPath = "./data/50epoch_softmax_large_model.pt"
-predictionLocation = "./images/prediction2.png"
-IMG_HEIGHT = 400
-IMG_WIDTH = 400
+modelPath = "./data/model_2023-11-24152752.pt"
+predictionLocation = "./images/prediction_vs_original.png"
+IMG_HEIGHT = 688
+IMG_WIDTH = 688
 
 
 # Setup Device
@@ -56,9 +56,27 @@ pred = torch.softmax(pred, dim=1)
 pred = pred.data.cpu().numpy()
 print(pred.shape)
 
+# Combine second and third channels
+combined_channels = np.maximum(pred[:, 1, :, :], pred[:, 2, :, :])
+
+# Replace gray pixels with white
+combined_channels[combined_channels > 0.5] = 1.0
+
+# Set the second and third channels to the combined result
+pred[:, 1, :, :] = combined_channels
+pred[:, 2, :, :] = combined_channels
+
 # Save Result
 img_to_plot = pred[0].transpose(1, 2, 0)
 plt.figure(figsize=(8, 8))
-plt.tight_layout()
+
+plt.subplot(1, 2, 1)
+plt.imshow(image.squeeze().cpu().numpy(), cmap="gray")
+plt.title("Original Image")
+
+plt.subplot(1, 2, 2)
 plt.imshow(img_to_plot, cmap="gray")
+plt.title("Prediction")
+
+plt.tight_layout()
 plt.savefig(predictionLocation)
