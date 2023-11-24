@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from functools import reduce
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, Subset
 from torchvision import transforms
 from torchvision.transforms.functional import crop
 from collections import defaultdict
 import torch.nn.functional as F
+import torch.nn as nn
 import torch
 import torch.optim as optim
 from torch.optim import lr_scheduler
@@ -16,19 +17,31 @@ from imutils import paths
 import cv2
 import sys
 import os
-import datetime
+import random
 
 # Global Variables
 batch_size = 5
-IMG_HEIGHT = 128
-IMG_WIDTH = 128
-EPOCHS = 1
+IMG_HEIGHT = 320
+IMG_WIDTH = 320
+EPOCHS = 5
+NUM_SAMPLES = 340
 
+# Auxillary Global Variables (Used for random cropping - see crop_rnd)
+crop_x = 0
+crop_y = 0
+crop_v = True # When creating figure, we want to always start at (0,0) - Makes comparison much easier
 
+print("IMAGE HEIGHT: " + str(IMG_HEIGHT))
+print("IMAGE WIDTH: " + str(IMG_WIDTH))
+print("MAX EPOCHS: " + str(EPOCHS))
+print("NUM SAMPLES: " + str(NUM_SAMPLES))
 
-# To Crop Images
-def crop800(image):
-    return crop(image, 0, 0, IMG_HEIGHT, IMG_WIDTH)
+# To Crop Images - Placement on picture is random every time to increase dataset
+def crop_rnd(image):
+    if crop_v:
+        return crop(image, crop_x, crop_y, IMG_HEIGHT, IMG_WIDTH)
+    else:
+        return crop(image, 0, 0, IMG_HEIGHT, IMG_WIDTH)
 
 # Thanks to: https://pyimagesearch.com/2021/11/08/u-net-training-image-segmentation-models-in-pytorch/
 class SegmentationDataset(Dataset):
@@ -46,35 +59,38 @@ class SegmentationDataset(Dataset):
         imagePath = self.imagePaths[idx]
         maskPath = self.maskPaths[idx]
 
+        img_name = os.path.basename(imagePath)
+        name = os.path.basename(maskPath)
+
         image = cv2.imread(imagePath, 0) # Read as grayscaled 
-        blackmask = cv2.imread("./data/split_masks/black/"+os.path.basename(maskPath), 0) 
-        greymask  = cv2.imread("./data/split_masks/grey/" +os.path.basename(maskPath), 0) 
-        whitemask = cv2.imread("./data/split_masks/white/"+os.path.basename(maskPath), 0) 
+        blackmask = cv2.imread("./data/split_masks/black/"+name, 0) 
+        greymask  = cv2.imread("./data/split_masks/grey/" +name, 0) 
+        whitemask = cv2.imread("./data/split_masks/white/"+name, 0) 
+
+
 
         # check to see if we are applying any transformations
         if self.transforms is not None:
+            # Setup Global Variables used for cropping
+            global crop_x, crop_y
+            #  Compute Random Cropping
+            actual_height = image.shape[0]
+            actual_width = image.shape[1]
+            crop_x = random.randint(0, actual_width  - IMG_WIDTH  - 1)
+            crop_y = random.randint(0, actual_height - IMG_HEIGHT - 1)
             # apply the transformations to both image and its mask
             image = self.transforms(image)
             blackmask = self.transforms(blackmask)
             greymask = self.transforms(greymask)
             whitemask = self.transforms(whitemask)
-        # return a tuple of the image and its mask
         
+        # return a tuple of the image and its masks
         total_mask = torch.zeros((3,IMG_HEIGHT,IMG_WIDTH))
         total_mask[0] = blackmask
         total_mask[1] = greymask
         total_mask[2] = whitemask
 
-        # print()
-        # print("Hello")
-        # print(imagePath)
-        # print(maskPath)
-        # print(image)
-        # print(image.shape)
-        # print(total_mask.shape)
-        # print(total_mask)
-        # sys.exit()
-        return (image, total_mask)
+        return (image, total_mask, img_name)
 
 # load the image and mask filepaths in a sorted manner
 imagePaths = sorted(list(paths.list_images('./data/data')))
@@ -89,7 +105,7 @@ split = train_test_split(imagePaths, maskPaths,
 
 
 transforms = transforms.Compose([transforms.ToPILImage(),
-    transforms.Lambda(crop800),
+    transforms.Lambda(crop_rnd),
     transforms.ToTensor()])
 
 # Load datasets
@@ -98,34 +114,13 @@ train_set = SegmentationDataset(imagePaths=trainImages, maskPaths=trainMasks,
 test_set = SegmentationDataset(imagePaths=testImages, maskPaths=testMasks,
     transforms=transforms)
 
+#Change size of training set for experiment
+train_set = Subset(train_set, range(NUM_SAMPLES))
+
+
 
 train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=False)
 test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True)
-
-
-def plot_img_array(img_array, ncol=3):
-    nrow = len(img_array) // ncol
-
-    f, plots = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 4, nrow * 4))
-
-    for i in range(len(img_array)):
-        for o in range(len(img_array[i])):
-            imgArray = img_array[i][o].transpose(1,2,0) # Reshape to match (H,W,C) from (C,H,W)
-            plots[i // ncol, i % ncol]
-            plots[i // ncol, i % ncol].imshow(imgArray, cmap='gray')
-
-    plt.savefig('./images/pictures_newBN.png')
-    
-
-
-def plot_side_by_side(img_arrays):
-    # print(img_arrays)
-    # flatten_list = reduce(lambda x,y: x+y, zip(*img_arrays))
-    # print(flatten_list.shape)
-    plot_img_array(img_arrays, ncol=len(img_arrays))
-
-
-
 
 
 def get_data_loaders():
@@ -137,27 +132,42 @@ def get_data_loaders():
     return dataloaders
 
 
-def dice_loss(pred, target, smooth=1.):
+def dice_loss(pred, target):
     pred = pred.contiguous()
     target = target.contiguous()
 
     intersection = (pred * target).sum(dim=2).sum(dim=2)
+    total_sum = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2);
+    
+    dice = 2.0*intersection/total_sum
 
-    loss = (1 - ((2. * intersection + smooth) / (pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) + smooth)))
+    return (1 - dice).mean();
 
-    return loss.mean()
+def IoU_loss(pred, target):
+    pred = pred.contiguous()
+    target = target.contiguous()
+
+    intersection = (pred * target).sum(dim=2).sum(dim=2)
+    union = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) - intersection;
+    
+    IoU = intersection/union
+
+    return (1 - IoU).mean();
 
 
-def calc_loss(pred, target, metrics, bce_weight=0.5):
-    bce = F.binary_cross_entropy_with_logits(pred, target)
+def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
+    cce = criterion(pred, target)
 
-    # pred = torch.sigmoid(pred)
-    pred = torch.softmax(pred, dim=1)
+    SoftMaxFunc = nn.Softmax2d()
+    pred = SoftMaxFunc(pred)
+
     dice = dice_loss(pred, target)
+    # IoU = IoU_loss(pred, target)
+    # print(IoU)
 
-    loss = bce * bce_weight + dice * (1 - bce_weight)
+    loss = cce * bce_weight + dice * (1 - bce_weight)
 
-    metrics['bce'] += bce.data.cpu().numpy() * target.size(0)
+    metrics['cce'] += cce.data.cpu().numpy() * target.size(0)
     metrics['dice'] += dice.data.cpu().numpy() * target.size(0)
     metrics['loss'] += loss.data.cpu().numpy() * target.size(0)
 
@@ -177,9 +187,14 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     best_model_wts = copy.deepcopy(model.state_dict())
     best_loss = 1e10
+    criterion = nn.CrossEntropyLoss()
+
+    # Early Stopping Variables
+    counter = 0
+    tolerance = 5
 
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('Epoch {}/{}'.format(epoch+1, num_epochs)) #Reformatted to make it more readable in console
         print('-' * 10)
 
         since = time.time()
@@ -197,7 +212,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
             metrics = defaultdict(float)
             epoch_samples = 0
 
-            for inputs, labels in dataloaders[phase]:
+            for inputs, labels, _ in dataloaders[phase]:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -208,7 +223,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
-                    loss = calc_loss(outputs, labels, metrics)
+                    loss = calc_loss(outputs, labels, metrics, criterion)
 
                     # backward + optimize only if in training phase
                     if phase == 'train':
@@ -227,6 +242,19 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                 print("saving best model")
                 best_loss = epoch_loss
                 best_model_wts = copy.deepcopy(model.state_dict())
+                counter = 0
+            elif phase == 'val':
+                # Implementation of Early Stopping
+                # Criteria: If no improvement of validation was made in 4 epocs
+                counter = counter + 1
+                if counter > tolerance:
+                    print("No improvements seen in " + str(tolerance) + " epochs. Initiating Early Stopping.")
+                    print('Best val loss: {:4f}'.format(best_loss))
+                    model.load_state_dict(best_model_wts) # Load and return best model
+                    return model
+            
+            
+
 
         time_elapsed = time.time() - since
         print('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -251,38 +279,22 @@ def run(UNet):
 
     model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=EPOCHS)
 
+
+    # Finish up and plot results
     model.eval()  # Set model to the evaluation mode
 
-    # trans = transforms.Compose([
-    #     transforms.ToTensor(),
-    #     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # imagenet
-    # ])
-    # # Create another simulation dataset for test
-    # Get the first batch
-    inputs, labels = next(iter(test_loader))
+    global crop_v
+    crop_v = False # Start at (0,0) for cropping
+    inputs, labels, img_names = next(iter(test_loader))
     inputs = inputs.to(device)
     labels = labels.to(device)
 
     # Predict
     pred = model(inputs)
-    # The loss functions include the sigmoid function.
-    # pred = torch.sigmoid(pred)
-    pred = torch.softmax(pred, dim=1)
+    SoftMaxFunc = nn.Softmax2d()
+    pred = SoftMaxFunc(pred)
     pred = pred.data.cpu().numpy()
-    print(pred.shape)
 
-    # Change channel-order and make 3 channels for matplot
-    # input_images_rgb = [reverse_transform(x) for x in inputs.cpu()]
-
-    # Map each channel (i.e. class) to each color
-    # target_masks_rgb = [masks_to_colorimg(x) for x in labels.cpu().numpy()]
-    # pred_rgb = [masks_to_colorimg(x) for x in pred]
-
-    # plot_side_by_side([inputs.cpu().numpy(),  labels.cpu().numpy(), pred])
-
-
-    #Subtract images pred - labels 
-    # Assuming labels and pred have the same shape
     difference = np.abs(labels.cpu().numpy() - pred)
     
     # Normalize the difference values to be in the range [0, 1]
@@ -299,15 +311,23 @@ def run(UNet):
             img = images[i][j]  # Access the image; images should be a 3D array: [channel, height, width]
             if i == ncol - 1:  # Use a different colormap for the difference plot
                 im = ax.imshow(img.transpose(1, 2, 0), cmap="viridis")
-                cbar = fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
+                fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
             else:
                 ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
-
+                if i == ncol - 2:
+                    ax.text(0.5, -0.1, img_names[j], fontsize=12, ha='center', va='center', transform=ax.transAxes)
+                
+                
     plt.tight_layout()
     plt.show()
-    timestamp =  datetime.datetime.now().strftime("%Y-%m-%d%H%M%S")
-    filename = f'./images/pictures_{timestamp}.png'
-    plt.savefig(filename)
+    filename =  time.strftime("%Y-%m-%d%H%M%S")
+    plt.savefig('./images/picture_training_' + filename + ".png")
+
 
     # Save the model!
-    torch.save(model.state_dict(), "./data/model.pt")
+    torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
+
+
+
+    # Save the model!
+    torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
