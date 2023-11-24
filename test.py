@@ -20,9 +20,11 @@ import datetime
 
 # Global Variables
 batch_size = 5
-IMG_HEIGHT = 400
-IMG_WIDTH = 400
+IMG_HEIGHT = 128
+IMG_WIDTH = 128
 EPOCHS = 1
+
+
 
 # To Crop Images
 def crop800(image):
@@ -290,6 +292,7 @@ def run(UNet):
     ncol = len(images)
     # Create a 5x3 subplot grid
     fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 5, nrow * 5)) # Adjust figsize as needed
+
     for i in range(len(images)):  # For each of the 4 pictures
         for j in range(5):  # For each of the 5 versions
             ax = axs[j, i]
@@ -297,13 +300,12 @@ def run(UNet):
             if i == ncol - 1:  # Use a different colormap for the difference plot
                 im = ax.imshow(img.transpose(1, 2, 0), cmap="viridis")
                 cbar = fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
-                cbar.ax.tick_params(labelsize=8)  # Adjust font size of the color bar ticks
             else:
                 ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
 
     plt.tight_layout()
     plt.show()
-    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    timestamp =  datetime.datetime.now().strftime("%Y-%m-%d%H%M%S")
     filename = f'./images/pictures_{timestamp}.png'
     plt.savefig(filename)
 
