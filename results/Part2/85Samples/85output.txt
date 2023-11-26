@@ -1,0 +1,41 @@
+IMAGE HEIGHT: 320
+IMAGE WIDTH: 320
+MAX EPOCHS: 5
+NUM SAMPLES: 85
+Device Used: cuda:0
+Epoch 1/5
+----------
+LR 0.0001
+train: cce: 1.105522, dice: 0.671532, loss: 0.888527
+val: cce: 1.088924, dice: 0.666848, loss: 0.877886
+saving best model
+0m 4s
+Epoch 2/5
+----------
+LR 0.0001
+train: cce: 1.057182, dice: 0.657808, loss: 0.857495
+val: cce: 1.005272, dice: 0.639840, loss: 0.822556
+saving best model
+0m 4s
+Epoch 3/5
+----------
+LR 0.0001
+train: cce: 0.871925, dice: 0.575364, loss: 0.723644
+val: cce: 0.675634, dice: 0.467992, loss: 0.571813
+saving best model
+0m 4s
+Epoch 4/5
+----------
+LR 0.0001
+train: cce: 0.527854, dice: 0.355356, loss: 0.441605
+val: cce: 0.356647, dice: 0.232832, loss: 0.294739
+saving best model
+0m 4s
+Epoch 5/5
+----------
+LR 0.0001
+train: cce: 0.266784, dice: 0.156487, loss: 0.211635
+val: cce: 0.221666, dice: 0.111616, loss: 0.166641
+saving best model
+0m 4s
+Best val loss: 0.166641

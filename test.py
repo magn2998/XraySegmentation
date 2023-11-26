@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from functools import reduce
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, Subset
 from torchvision import transforms
 from torchvision.transforms.functional import crop
 from collections import defaultdict
 import torch.nn.functional as F
+import torch.nn as nn
 import torch.nn as nn
 import torch
 import torch.optim as optim
@@ -19,13 +20,12 @@ import sys
 import os
 import random
 
-import FocalLoss 
-
 # Global Variables
 batch_size = 5
-IMG_HEIGHT = 496
-IMG_WIDTH = 496
+IMG_HEIGHT = 320
+IMG_WIDTH = 320
 EPOCHS = 100
+NUM_SAMPLES = 425
 
 # Auxillary Global Variables (Used for random cropping - see crop_rnd)
 crop_x = 0
@@ -35,6 +35,7 @@ crop_v = True # When creating figure, we want to always start at (0,0) - Makes c
 print("IMAGE HEIGHT: " + str(IMG_HEIGHT))
 print("IMAGE WIDTH: " + str(IMG_WIDTH))
 print("MAX EPOCHS: " + str(EPOCHS))
+print("NUM SAMPLES: " + str(NUM_SAMPLES))
 
 # To Crop Images - Placement on picture is random every time to increase dataset
 def crop_rnd(image):
@@ -114,6 +115,8 @@ train_set = SegmentationDataset(imagePaths=trainImages, maskPaths=trainMasks,
 test_set = SegmentationDataset(imagePaths=testImages, maskPaths=testMasks,
     transforms=transforms)
 
+#Change size of training set for experiment
+train_set = Subset(train_set, range(NUM_SAMPLES))
 
 train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=False)
 test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True)
@@ -127,7 +130,6 @@ def get_data_loaders():
 
     return dataloaders
 
-
 def dice_loss(pred, target):
     pred = pred.contiguous()
     target = target.contiguous()
@@ -136,7 +138,6 @@ def dice_loss(pred, target):
     total_sum = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2);
     
     dice = 2.0*intersection/total_sum
-
     return (1 - dice).mean()
 
 def IoU_loss(pred, target):
@@ -149,7 +150,6 @@ def IoU_loss(pred, target):
     IoU = intersection/union
 
     return (1 - IoU).mean()
-
 
 def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     cce = criterion(pred, target)
@@ -190,7 +190,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
     tolerance = 5
 
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('Epoch {}/{}'.format(epoch+1, num_epochs)) #Reformatted to make it more readable in console
         print('-' * 10)
 
         since = time.time()
@@ -249,8 +249,6 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                     model.load_state_dict(best_model_wts) # Load and return best model
                     return model
             
-            
-
 
         time_elapsed = time.time() - since
         print('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -291,25 +289,39 @@ def run(UNet):
     pred = SoftMaxFunc(pred)
     pred = pred.data.cpu().numpy()
 
-    images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred]
+    difference = np.abs(labels.cpu().numpy() - pred)
+    
+    # Normalize the difference values to be in the range [0, 1]
+    images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred, difference]
 
     nrow = pred.shape[0]
     ncol = len(images)
     # Create a 5x3 subplot grid
-    fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 4, nrow * 4)) # Adjust figsize as needed
-    for i in range(ncol):  # For each of the 3 pictures
-        for j in range(nrow):  # For each of the 5 versions
+    fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 5, nrow * 5)) # Adjust figsize as needed
+
+    for i in range(len(images)):  # For each of the 4 pictures
+        for j in range(5):  # For each of the 5 versions
             ax = axs[j, i]
             img = images[i][j]  # Access the image; images should be a 3D array: [channel, height, width]
-            ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
-            if i == ncol - 2:
-                ax.text(0.5, -0.1, img_names[j], fontsize=12, ha='center', va='center', transform=ax.transAxes)
-
-
-    filename = time.strftime("%m_%d_%H:%M:%S")
+            if i == ncol - 1:  # Use a different colormap for the difference plot
+                im = ax.imshow(img.transpose(1, 2, 0), cmap="viridis")
+                fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
+            else:
+                ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
+                if i == ncol - 2:
+                    ax.text(0.5, -0.1, img_names[j], fontsize=12, ha='center', va='center', transform=ax.transAxes)
+                
+                
     plt.tight_layout()
     plt.show()
+    filename =  time.strftime("%Y-%m-%d%H%M%S")
     plt.savefig('./images/picture_training_' + filename + ".png")
+
+
+    # Save the model!
+    torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
+
+
 
     # Save the model!
     torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
