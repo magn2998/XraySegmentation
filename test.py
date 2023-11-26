@@ -320,8 +320,3 @@ def run(UNet):
 
     # Save the model!
     torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
-
-
-
-    # Save the model!
-    torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
