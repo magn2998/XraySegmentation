@@ -18,16 +18,59 @@ import sys
 import os
 import Unet
 
-imagePath = "./data/difficultData/Slice_ 1316.png"
-modelPath = "./data/model_2023-11-24152752.pt"
-predictionLocation = "./images/prediction_vs_original.png"
-IMG_HEIGHT = 688
-IMG_WIDTH = 688
+imageNo = "227"
+
+modelPath = "./results/Part1/128Images/model_11_24_09:46:40.pt"
+predictionLocation = "./images/prediction72_1.png"
+IMG_HEIGHT = 496
+IMG_WIDTH = 496
+
+
+imageLabel = "slice__" + imageNo + ".tif"
+imagePath = "./data/data/SOCprist0" + imageNo + ".tiff"
 
 
 # Setup Device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Device Used: " + str(device))
+
+
+def dice_loss(pred, target):
+    pred = pred.contiguous()
+    target = target.contiguous()
+
+    intersection = (pred * target).sum(dim=2).sum(dim=2)
+    total_sum = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2);
+    
+    dice = 2.0*intersection/total_sum
+
+    return (1 - dice).mean()
+
+def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
+    cce = criterion(pred, target)
+
+    SoftMaxFunc = torch.nn.Softmax2d()
+    pred = SoftMaxFunc(pred)
+
+    dice = dice_loss(pred, target)
+    # IoU = IoU_loss(pred, target)
+    # print(IoU)
+
+    loss = cce * bce_weight + dice * (1 - bce_weight)
+
+    metrics['cce'] += cce.data.cpu().numpy() * target.size(0)
+    metrics['dice'] += dice.data.cpu().numpy() * target.size(0)
+    metrics['loss'] += loss.data.cpu().numpy() * target.size(0)
+
+    return loss
+
+
+def print_metrics(metrics, epoch_samples, phase):
+    outputs = []
+    for k in metrics.keys():
+        outputs.append("{}: {:4f}".format(k, metrics[k] / epoch_samples))
+
+    print("{}: {}".format(phase, ", ".join(outputs)))
 
 
 # Read Image and setup input
@@ -51,12 +94,12 @@ model.load_state_dict(torch.load(modelPath))
 model.eval() 
 
 # Make Prediction
-pred = model(input)
-pred = torch.softmax(pred, dim=1)
+pred_raw = model(input)
+pred = torch.softmax(pred_raw, dim=1)
 pred = pred.data.cpu().numpy()
 print(pred.shape)
 
-# Combine second and third channels
+# Combine second and third channels for difficult images
 combined_channels = np.maximum(pred[:, 1, :, :], pred[:, 2, :, :])
 
 # Replace gray pixels with white
@@ -65,6 +108,30 @@ combined_channels[combined_channels > 0.5] = 1.0
 # Set the second and third channels to the combined result
 pred[:, 1, :, :] = combined_channels
 pred[:, 2, :, :] = combined_channels
+
+# Read True Label
+blackmask = cv2.imread("./data/split_masks/black/" + imageLabel, 0) 
+greymask  = cv2.imread("./data/split_masks/grey/"  + imageLabel, 0) 
+whitemask = cv2.imread("./data/split_masks/white/" + imageLabel, 0) 
+
+blackmask = transformers(blackmask)
+greymask  = transformers(greymask)
+whitemask = transformers(whitemask)
+
+total_mask = torch.zeros((3, blackmask.size(1), blackmask.size(2)))
+total_mask[0] = blackmask
+total_mask[1] = greymask
+total_mask[2] = whitemask
+
+# Unsqueeze
+total_mask = total_mask.unsqueeze(0)
+
+# Calculate Loss
+metrics = defaultdict(float)
+criterion = torch.nn.CrossEntropyLoss()
+loss = calc_loss(pred_raw.cpu(), total_mask, metrics, criterion)
+print_metrics(metrics, 1, "val")
+
 
 # Save Result
 img_to_plot = pred[0].transpose(1, 2, 0)
