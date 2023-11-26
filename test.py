@@ -137,7 +137,7 @@ def dice_loss(pred, target):
     
     dice = 2.0*intersection/total_sum
 
-    return (1 - dice).mean();
+    return (1 - dice).mean()
 
 def IoU_loss(pred, target):
     pred = pred.contiguous()
@@ -148,7 +148,7 @@ def IoU_loss(pred, target):
     
     IoU = intersection/union
 
-    return (1 - IoU).mean();
+    return (1 - IoU).mean()
 
 
 def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
