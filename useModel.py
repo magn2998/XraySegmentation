@@ -20,10 +20,10 @@ import Unet
 
 imageNo = "227"
 
-modelPath = "./results/Part1/416Images/model_11_24_10:40:23.pt"
-predictionLocation = "./images/prediction70.png"
-IMG_HEIGHT = 416
-IMG_WIDTH = 416
+modelPath = "./results/Part1/128Images/model_11_24_09:46:40.pt"
+predictionLocation = "./images/prediction72_1.png"
+IMG_HEIGHT = 496
+IMG_WIDTH = 496
 
 
 imageLabel = "slice__" + imageNo + ".tif"
@@ -96,7 +96,7 @@ model.eval()
 # Make Prediction
 pred_raw = model(input)
 pred = torch.softmax(pred_raw, dim=1)
-pred = pred_raw.data.cpu().numpy()
+pred = pred.data.cpu().numpy()
 print(pred.shape)
 
 # Read True Label
