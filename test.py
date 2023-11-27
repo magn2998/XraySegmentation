@@ -22,15 +22,15 @@ import random
 
 # Global Variables
 batch_size = 5
-IMG_HEIGHT = 320
-IMG_WIDTH = 320
+IMG_HEIGHT = 64
+IMG_WIDTH = 64
 EPOCHS = 100
-NUM_SAMPLES = 425
+NUM_SAMPLES = -1 # Set to -1 to disable
 
-# Auxillary Global Variables (Used for random cropping - see crop_rnd)
+# Auxillary Global Variables (Used for random cropping - see crop_rnd - dont change values)
 crop_x = 0
 crop_y = 0
-crop_v = True # When creating figure, we want to always start at (0,0) - Makes comparison much easier
+crop_v = True # When creating figure, we want to always start at (0,0) - Makes comparison much easier - this variable enables/disables this
 
 print("IMAGE HEIGHT: " + str(IMG_HEIGHT))
 print("IMAGE WIDTH: " + str(IMG_WIDTH))
@@ -116,7 +116,8 @@ test_set = SegmentationDataset(imagePaths=testImages, maskPaths=testMasks,
     transforms=transforms)
 
 #Change size of training set for experiment
-train_set = Subset(train_set, range(NUM_SAMPLES))
+if NUM_SAMPLES > 0:
+    train_set = Subset(train_set, range(NUM_SAMPLES))
 
 train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0, drop_last=False)
 test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0, drop_last=True)
