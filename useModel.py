@@ -53,9 +53,6 @@ def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     pred = SoftMaxFunc(pred)
 
     dice = dice_loss(pred, target)
-    # IoU = IoU_loss(pred, target)
-    # print(IoU)
-
     loss = cce * bce_weight + dice * (1 - bce_weight)
 
     metrics['cce'] += cce.data.cpu().numpy() * target.size(0)
