@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from collections import defaultdict
 import cv2
-import Unet
+import Unet_old
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from imutils import paths
@@ -258,7 +258,7 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_wor
 inputs, labels, img_names = next(iter(test_loader))
 
 # Setup Model
-model = Unet.UNet(3).to(device)
+model = Unet_old.UNet(3).to(device)
 model.load_state_dict(torch.load(modelPath))
 model.eval() 
 

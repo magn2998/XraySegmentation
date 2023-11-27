@@ -16,7 +16,7 @@ from imutils import paths
 import cv2
 import sys
 import os
-import Unet
+import Unet_old
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -144,7 +144,7 @@ test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_wor
 
 
 # Setup Model
-model = Unet.UNet(3).to(device)
+model = Unet_old.UNet(3).to(device)
 model.load_state_dict(torch.load(modelPath))
 model.eval() 
 

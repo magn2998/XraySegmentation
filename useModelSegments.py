@@ -6,19 +6,19 @@ import torch
 import torch.nn as nn
 from collections import defaultdict
 import cv2
-import Unet
+import Unet_old
 
 imageNo = "227"
-modelPath = "./results/Part1/416Images/model_11_24_10:40:23.pt"
-predictionLocation = "./images/prediction69.png"
+modelPath = "./results/Part1/320Images/model_11_24_10:07:05.pt"
+predictionLocation = "./images/prediction69_3.png"
 
 imagePath = "./data/data/SOCprist0" + imageNo + ".tiff"
 imageLabel = "slice__" + imageNo + ".tif"
 
 
 
-SEGMENTS_WIDTH   = 416 # Height of individual segments, which are cropped section of the original image
-SEGMENTS_HEIGHT  = 416 # Same as above, just for height
+SEGMENTS_WIDTH   = 320 # Height of individual segments, which are cropped section of the original image
+SEGMENTS_HEIGHT  = 320 # Same as above, just for height
 SEGMENTS_OVERLAP = 10  # Pixels to overlap between segments
 
 
@@ -193,7 +193,7 @@ image = torch.squeeze(image)
 print(image.shape)
 
 # Setup Model
-model = Unet.UNet(3).to(device)
+model = Unet_old.UNet(3).to(device)
 model.load_state_dict(torch.load(modelPath))
 model.eval() 
 

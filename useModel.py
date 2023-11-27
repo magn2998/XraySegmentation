@@ -16,7 +16,7 @@ from imutils import paths
 import cv2
 import sys
 import os
-import Unet
+import Unet_old
 
 imageNo = "227"
 
@@ -86,7 +86,7 @@ input = input.unsqueeze(0) # Make the dimension match (c,H,W) -> (n, c, H, W)
 print(input.shape)
 
 # Setup Model
-model = Unet.UNet(3).to(device)
+model = Unet_old.UNet(3).to(device)
 model.load_state_dict(torch.load(modelPath))
 model.eval() 
 
