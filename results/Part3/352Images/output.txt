@@ -1,0 +1,14 @@
+On 496x496
+n-62-20-1(s204509) $ python3 useModelBatch.py
+Device Used: cuda:0
+val: cce: 0.015568, dice: 0.008245, loss: 0.011906
+
+On Entire image using image segmentation
+n-62-20-1(s204509) $ python3 useModelSegmentsBatch.py 
+Device Used: cuda:0
+Analysing next picture!
+Analysing next picture!
+Analysing next picture!
+Analysing next picture!
+Analysing next picture!
+val: cce: 0.016380, dice: 0.008433, loss: 0.012407

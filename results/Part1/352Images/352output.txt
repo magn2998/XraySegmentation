@@ -1,0 +1,636 @@
+n-62-20-1(s204509) $ python3 Unet.py
+IMAGE HEIGHT: 352
+IMAGE WIDTH: 352
+MAX EPOCHS: 100
+NUM SAMPLES: -1
+Device Used: cuda:0
+Epoch 1/100
+----------
+LR 0.0001
+train: cce: 0.814883, dice: 0.520543, loss: 0.667713
+val: cce: 0.341385, dice: 0.208599, loss: 0.274992
+saving best model
+0m 40s
+Epoch 2/100
+----------
+LR 0.0001
+train: cce: 0.197178, dice: 0.105822, loss: 0.151500
+val: cce: 0.129987, dice: 0.068617, loss: 0.099302
+saving best model
+0m 15s
+Epoch 3/100
+----------
+LR 0.0001
+train: cce: 0.106093, dice: 0.052965, loss: 0.079529
+val: cce: 0.076689, dice: 0.040437, loss: 0.058563
+saving best model
+0m 15s
+Epoch 4/100
+----------
+LR 0.0001
+train: cce: 0.068282, dice: 0.036300, loss: 0.052291
+val: cce: 0.054957, dice: 0.030038, loss: 0.042498
+saving best model
+0m 15s
+Epoch 5/100
+----------
+LR 0.0001
+train: cce: 0.050906, dice: 0.027833, loss: 0.039369
+val: cce: 0.045333, dice: 0.025103, loss: 0.035218
+saving best model
+0m 15s
+Epoch 6/100
+----------
+LR 0.0001
+train: cce: 0.043944, dice: 0.024094, loss: 0.034019
+val: cce: 0.042046, dice: 0.022989, loss: 0.032518
+saving best model
+0m 15s
+Epoch 7/100
+----------
+LR 0.0001
+train: cce: 0.040299, dice: 0.021967, loss: 0.031133
+val: cce: 0.038498, dice: 0.020643, loss: 0.029571
+saving best model
+0m 16s
+Epoch 8/100
+----------
+LR 0.0001
+train: cce: 0.037397, dice: 0.020334, loss: 0.028866
+val: cce: 0.037418, dice: 0.019378, loss: 0.028398
+saving best model
+0m 15s
+Epoch 9/100
+----------
+LR 0.0001
+train: cce: 0.036558, dice: 0.019486, loss: 0.028022
+val: cce: 0.037278, dice: 0.019465, loss: 0.028371
+saving best model
+0m 15s
+Epoch 10/100
+----------
+LR 0.0001
+train: cce: 0.034384, dice: 0.018500, loss: 0.026442
+val: cce: 0.034664, dice: 0.017838, loss: 0.026251
+saving best model
+0m 16s
+Epoch 11/100
+----------
+LR 0.0001
+train: cce: 0.033894, dice: 0.017983, loss: 0.025938
+val: cce: 0.033830, dice: 0.017755, loss: 0.025793
+saving best model
+0m 16s
+Epoch 12/100
+----------
+LR 0.0001
+train: cce: 0.032208, dice: 0.017257, loss: 0.024732
+val: cce: 0.032031, dice: 0.016460, loss: 0.024246
+saving best model
+0m 15s
+Epoch 13/100
+----------
+LR 0.0001
+train: cce: 0.031935, dice: 0.016929, loss: 0.024432
+val: cce: 0.032172, dice: 0.016319, loss: 0.024245
+saving best model
+0m 15s
+Epoch 14/100
+----------
+LR 0.0001
+train: cce: 0.030788, dice: 0.016322, loss: 0.023555
+val: cce: 0.031430, dice: 0.016362, loss: 0.023896
+saving best model
+0m 16s
+Epoch 15/100
+----------
+LR 0.0001
+train: cce: 0.029831, dice: 0.015891, loss: 0.022861
+val: cce: 0.030754, dice: 0.015866, loss: 0.023310
+saving best model
+0m 15s
+Epoch 16/100
+----------
+LR 0.0001
+train: cce: 0.029618, dice: 0.015600, loss: 0.022609
+val: cce: 0.032248, dice: 0.016384, loss: 0.024316
+0m 16s
+Epoch 17/100
+----------
+LR 0.0001
+train: cce: 0.028868, dice: 0.015436, loss: 0.022152
+val: cce: 0.030133, dice: 0.015579, loss: 0.022856
+saving best model
+0m 16s
+Epoch 18/100
+----------
+LR 0.0001
+train: cce: 0.027306, dice: 0.014664, loss: 0.020985
+val: cce: 0.030052, dice: 0.015195, loss: 0.022624
+saving best model
+0m 16s
+Epoch 19/100
+----------
+LR 0.0001
+train: cce: 0.028334, dice: 0.014907, loss: 0.021621
+val: cce: 0.028357, dice: 0.014534, loss: 0.021445
+saving best model
+0m 15s
+Epoch 20/100
+----------
+LR 0.0001
+train: cce: 0.027274, dice: 0.014482, loss: 0.020878
+val: cce: 0.027541, dice: 0.014628, loss: 0.021085
+saving best model
+0m 16s
+Epoch 21/100
+----------
+LR 0.0001
+train: cce: 0.026617, dice: 0.014190, loss: 0.020404
+val: cce: 0.027186, dice: 0.013958, loss: 0.020572
+saving best model
+0m 15s
+Epoch 22/100
+----------
+LR 0.0001
+train: cce: 0.026238, dice: 0.013940, loss: 0.020089
+val: cce: 0.027165, dice: 0.014190, loss: 0.020678
+0m 15s
+Epoch 23/100
+----------
+LR 0.0001
+train: cce: 0.026360, dice: 0.013874, loss: 0.020117
+val: cce: 0.034909, dice: 0.016239, loss: 0.025574
+0m 15s
+Epoch 24/100
+----------
+LR 0.0001
+train: cce: 0.026305, dice: 0.014139, loss: 0.020222
+val: cce: 0.027104, dice: 0.013811, loss: 0.020458
+saving best model
+0m 15s
+Epoch 25/100
+----------
+LR 0.0001
+train: cce: 0.025143, dice: 0.013411, loss: 0.019277
+val: cce: 0.026575, dice: 0.013848, loss: 0.020212
+saving best model
+0m 16s
+Epoch 26/100
+----------
+LR 0.0001
+train: cce: 0.024662, dice: 0.013211, loss: 0.018937
+val: cce: 0.026103, dice: 0.013165, loss: 0.019634
+saving best model
+0m 15s
+Epoch 27/100
+----------
+LR 0.0001
+train: cce: 0.024100, dice: 0.012933, loss: 0.018516
+val: cce: 0.025191, dice: 0.013002, loss: 0.019096
+saving best model
+0m 15s
+Epoch 28/100
+----------
+LR 0.0001
+train: cce: 0.024015, dice: 0.012838, loss: 0.018427
+val: cce: 0.024482, dice: 0.012900, loss: 0.018691
+saving best model
+0m 15s
+Epoch 29/100
+----------
+LR 0.0001
+train: cce: 0.023415, dice: 0.012591, loss: 0.018003
+val: cce: 0.026184, dice: 0.013190, loss: 0.019687
+0m 15s
+Epoch 30/100
+----------
+LR 0.0001
+train: cce: 0.023545, dice: 0.012656, loss: 0.018101
+val: cce: 0.024692, dice: 0.012641, loss: 0.018667
+saving best model
+0m 16s
+Epoch 31/100
+----------
+LR 0.0001
+train: cce: 0.022988, dice: 0.012376, loss: 0.017682
+val: cce: 0.024881, dice: 0.012905, loss: 0.018893
+0m 15s
+Epoch 32/100
+----------
+LR 0.0001
+train: cce: 0.022791, dice: 0.012300, loss: 0.017546
+val: cce: 0.024529, dice: 0.012787, loss: 0.018658
+saving best model
+0m 15s
+Epoch 33/100
+----------
+LR 0.0001
+train: cce: 0.022552, dice: 0.012175, loss: 0.017363
+val: cce: 0.023295, dice: 0.012315, loss: 0.017805
+saving best model
+0m 15s
+Epoch 34/100
+----------
+LR 0.0001
+train: cce: 0.022152, dice: 0.012021, loss: 0.017087
+val: cce: 0.023967, dice: 0.012065, loss: 0.018016
+0m 15s
+Epoch 35/100
+----------
+LR 0.0001
+train: cce: 0.021926, dice: 0.011842, loss: 0.016884
+val: cce: 0.023082, dice: 0.011791, loss: 0.017436
+saving best model
+0m 15s
+Epoch 36/100
+----------
+LR 0.0001
+train: cce: 0.021517, dice: 0.011637, loss: 0.016577
+val: cce: 0.022753, dice: 0.011988, loss: 0.017371
+saving best model
+0m 15s
+Epoch 37/100
+----------
+LR 0.0001
+train: cce: 0.021201, dice: 0.011535, loss: 0.016368
+val: cce: 0.023235, dice: 0.011815, loss: 0.017525
+0m 16s
+Epoch 38/100
+----------
+LR 0.0001
+train: cce: 0.020924, dice: 0.011351, loss: 0.016137
+val: cce: 0.024100, dice: 0.012181, loss: 0.018141
+0m 15s
+Epoch 39/100
+----------
+LR 0.0001
+train: cce: 0.020703, dice: 0.011309, loss: 0.016006
+val: cce: 0.022302, dice: 0.011544, loss: 0.016923
+saving best model
+0m 16s
+Epoch 40/100
+----------
+LR 0.0001
+train: cce: 0.020971, dice: 0.011356, loss: 0.016163
+val: cce: 0.022450, dice: 0.011536, loss: 0.016993
+0m 15s
+Epoch 41/100
+----------
+LR 0.0001
+train: cce: 0.020082, dice: 0.011005, loss: 0.015544
+val: cce: 0.022572, dice: 0.011649, loss: 0.017110
+0m 16s
+Epoch 42/100
+----------
+LR 0.0001
+train: cce: 0.020195, dice: 0.010995, loss: 0.015595
+val: cce: 0.021574, dice: 0.011263, loss: 0.016418
+saving best model
+0m 15s
+Epoch 43/100
+----------
+LR 0.0001
+train: cce: 0.020373, dice: 0.011064, loss: 0.015718
+val: cce: 0.022703, dice: 0.011704, loss: 0.017203
+0m 15s
+Epoch 44/100
+----------
+LR 0.0001
+train: cce: 0.019577, dice: 0.010732, loss: 0.015154
+val: cce: 0.022655, dice: 0.011479, loss: 0.017067
+0m 15s
+Epoch 45/100
+----------
+LR 0.0001
+train: cce: 0.019716, dice: 0.010739, loss: 0.015227
+val: cce: 0.022354, dice: 0.011325, loss: 0.016839
+0m 16s
+Epoch 46/100
+----------
+LR 0.0001
+train: cce: 0.019471, dice: 0.010637, loss: 0.015054
+val: cce: 0.021801, dice: 0.011029, loss: 0.016415
+saving best model
+0m 15s
+Epoch 47/100
+----------
+LR 0.0001
+train: cce: 0.019165, dice: 0.010446, loss: 0.014806
+val: cce: 0.022414, dice: 0.011400, loss: 0.016907
+0m 16s
+Epoch 48/100
+----------
+LR 0.0001
+train: cce: 0.019463, dice: 0.010613, loss: 0.015038
+val: cce: 0.022108, dice: 0.011399, loss: 0.016754
+0m 16s
+Epoch 49/100
+----------
+LR 0.0001
+train: cce: 0.019349, dice: 0.010565, loss: 0.014957
+val: cce: 0.021982, dice: 0.010900, loss: 0.016441
+0m 16s
+Epoch 50/100
+----------
+LR 0.0001
+train: cce: 0.018807, dice: 0.010295, loss: 0.014551
+val: cce: 0.022526, dice: 0.010956, loss: 0.016741
+0m 16s
+Epoch 51/100
+----------
+LR 0.0001
+train: cce: 0.018700, dice: 0.010240, loss: 0.014470
+val: cce: 0.020751, dice: 0.010708, loss: 0.015730
+saving best model
+0m 16s
+Epoch 52/100
+----------
+LR 0.0001
+train: cce: 0.018777, dice: 0.010230, loss: 0.014504
+val: cce: 0.021536, dice: 0.010950, loss: 0.016243
+0m 15s
+Epoch 53/100
+----------
+LR 0.0001
+train: cce: 0.018329, dice: 0.010070, loss: 0.014199
+val: cce: 0.020542, dice: 0.010244, loss: 0.015393
+saving best model
+0m 16s
+Epoch 54/100
+----------
+LR 0.0001
+train: cce: 0.018382, dice: 0.009998, loss: 0.014190
+val: cce: 0.020220, dice: 0.010546, loss: 0.015383
+saving best model
+0m 16s
+Epoch 55/100
+----------
+LR 0.0001
+train: cce: 0.018159, dice: 0.009968, loss: 0.014063
+val: cce: 0.020959, dice: 0.010447, loss: 0.015703
+0m 15s
+Epoch 56/100
+----------
+LR 0.0001
+train: cce: 0.018033, dice: 0.009883, loss: 0.013958
+val: cce: 0.020212, dice: 0.010462, loss: 0.015337
+saving best model
+0m 16s
+Epoch 57/100
+----------
+LR 0.0001
+train: cce: 0.017713, dice: 0.009718, loss: 0.013716
+val: cce: 0.021065, dice: 0.010486, loss: 0.015775
+0m 16s
+Epoch 58/100
+----------
+LR 0.0001
+train: cce: 0.018094, dice: 0.009915, loss: 0.014004
+val: cce: 0.020865, dice: 0.010302, loss: 0.015584
+0m 16s
+Epoch 59/100
+----------
+LR 0.0001
+train: cce: 0.017732, dice: 0.009705, loss: 0.013718
+val: cce: 0.020805, dice: 0.010355, loss: 0.015580
+0m 15s
+Epoch 60/100
+----------
+LR 0.0001
+train: cce: 0.017720, dice: 0.009705, loss: 0.013713
+val: cce: 0.021401, dice: 0.010464, loss: 0.015932
+0m 16s
+Epoch 61/100
+----------
+LR 0.0001
+train: cce: 0.017729, dice: 0.009698, loss: 0.013713
+val: cce: 0.020046, dice: 0.010128, loss: 0.015087
+saving best model
+0m 16s
+Epoch 62/100
+----------
+LR 0.0001
+train: cce: 0.017528, dice: 0.009592, loss: 0.013560
+val: cce: 0.020324, dice: 0.010184, loss: 0.015254
+0m 16s
+Epoch 63/100
+----------
+LR 0.0001
+train: cce: 0.017235, dice: 0.009475, loss: 0.013355
+val: cce: 0.020375, dice: 0.010006, loss: 0.015190
+0m 16s
+Epoch 64/100
+----------
+LR 0.0001
+train: cce: 0.017209, dice: 0.009455, loss: 0.013332
+val: cce: 0.020387, dice: 0.009964, loss: 0.015176
+0m 16s
+Epoch 65/100
+----------
+LR 0.0001
+train: cce: 0.017019, dice: 0.009319, loss: 0.013169
+val: cce: 0.020052, dice: 0.010085, loss: 0.015068
+saving best model
+0m 16s
+Epoch 66/100
+----------
+LR 0.0001
+train: cce: 0.017220, dice: 0.009424, loss: 0.013322
+val: cce: 0.019170, dice: 0.009863, loss: 0.014517
+saving best model
+0m 16s
+Epoch 67/100
+----------
+LR 0.0001
+train: cce: 0.016792, dice: 0.009221, loss: 0.013006
+val: cce: 0.021406, dice: 0.010386, loss: 0.015896
+0m 15s
+Epoch 68/100
+----------
+LR 0.0001
+train: cce: 0.016921, dice: 0.009278, loss: 0.013100
+val: cce: 0.019525, dice: 0.009807, loss: 0.014666
+0m 15s
+Epoch 69/100
+----------
+LR 0.0001
+train: cce: 0.016846, dice: 0.009240, loss: 0.013043
+val: cce: 0.020748, dice: 0.010020, loss: 0.015384
+0m 16s
+Epoch 70/100
+----------
+LR 0.0001
+train: cce: 0.016845, dice: 0.009239, loss: 0.013042
+val: cce: 0.020203, dice: 0.009930, loss: 0.015067
+0m 15s
+Epoch 71/100
+----------
+LR 0.0001
+train: cce: 0.016513, dice: 0.009064, loss: 0.012789
+val: cce: 0.019335, dice: 0.009720, loss: 0.014528
+0m 16s
+Epoch 72/100
+----------
+LR 0.0001
+train: cce: 0.016550, dice: 0.009091, loss: 0.012820
+val: cce: 0.019075, dice: 0.009695, loss: 0.014385
+saving best model
+0m 16s
+Epoch 73/100
+----------
+LR 0.0001
+train: cce: 0.016591, dice: 0.009097, loss: 0.012844
+val: cce: 0.019678, dice: 0.009721, loss: 0.014700
+0m 16s
+Epoch 74/100
+----------
+LR 0.0001
+train: cce: 0.016177, dice: 0.008913, loss: 0.012545
+val: cce: 0.019073, dice: 0.009441, loss: 0.014257
+saving best model
+0m 16s
+Epoch 75/100
+----------
+LR 0.0001
+train: cce: 0.016118, dice: 0.008856, loss: 0.012487
+val: cce: 0.019338, dice: 0.009606, loss: 0.014472
+0m 16s
+Epoch 76/100
+----------
+LR 0.0001
+train: cce: 0.016160, dice: 0.008863, loss: 0.012511
+val: cce: 0.019362, dice: 0.009665, loss: 0.014513
+0m 16s
+Epoch 77/100
+----------
+LR 0.0001
+train: cce: 0.016217, dice: 0.008910, loss: 0.012564
+val: cce: 0.018827, dice: 0.009423, loss: 0.014125
+saving best model
+0m 15s
+Epoch 78/100
+----------
+LR 0.0001
+train: cce: 0.015984, dice: 0.008766, loss: 0.012375
+val: cce: 0.018996, dice: 0.009321, loss: 0.014158
+0m 16s
+Epoch 79/100
+----------
+LR 0.0001
+train: cce: 0.016161, dice: 0.008867, loss: 0.012514
+val: cce: 0.019857, dice: 0.009583, loss: 0.014720
+0m 16s
+Epoch 80/100
+----------
+LR 0.0001
+train: cce: 0.015848, dice: 0.008720, loss: 0.012284
+val: cce: 0.018785, dice: 0.009437, loss: 0.014111
+saving best model
+0m 15s
+Epoch 81/100
+----------
+LR 0.0001
+train: cce: 0.015730, dice: 0.008646, loss: 0.012188
+val: cce: 0.019037, dice: 0.009224, loss: 0.014131
+0m 16s
+Epoch 82/100
+----------
+LR 0.0001
+train: cce: 0.015974, dice: 0.008757, loss: 0.012365
+val: cce: 0.019194, dice: 0.009336, loss: 0.014265
+0m 16s
+Epoch 83/100
+----------
+LR 0.0001
+train: cce: 0.015737, dice: 0.008655, loss: 0.012196
+val: cce: 0.019047, dice: 0.009356, loss: 0.014201
+0m 16s
+Epoch 84/100
+----------
+LR 0.0001
+train: cce: 0.015732, dice: 0.008625, loss: 0.012179
+val: cce: 0.019946, dice: 0.009630, loss: 0.014788
+0m 16s
+Epoch 85/100
+----------
+LR 0.0001
+train: cce: 0.015569, dice: 0.008558, loss: 0.012063
+val: cce: 0.019116, dice: 0.009316, loss: 0.014216
+0m 16s
+Epoch 86/100
+----------
+LR 0.0001
+train: cce: 0.015360, dice: 0.008440, loss: 0.011900
+val: cce: 0.018687, dice: 0.009233, loss: 0.013960
+saving best model
+0m 16s
+Epoch 87/100
+----------
+LR 0.0001
+train: cce: 0.015380, dice: 0.008469, loss: 0.011924
+val: cce: 0.019247, dice: 0.009470, loss: 0.014359
+0m 15s
+Epoch 88/100
+----------
+LR 0.0001
+train: cce: 0.015261, dice: 0.008374, loss: 0.011818
+val: cce: 0.018480, dice: 0.009125, loss: 0.013803
+saving best model
+0m 16s
+Epoch 89/100
+----------
+LR 0.0001
+train: cce: 0.015242, dice: 0.008392, loss: 0.011817
+val: cce: 0.018670, dice: 0.009016, loss: 0.013843
+0m 16s
+Epoch 90/100
+----------
+LR 0.0001
+train: cce: 0.015315, dice: 0.008392, loss: 0.011853
+val: cce: 0.019009, dice: 0.009356, loss: 0.014183
+0m 16s
+Epoch 91/100
+----------
+LR 0.0001
+train: cce: 0.015078, dice: 0.008310, loss: 0.011694
+val: cce: 0.018075, dice: 0.008971, loss: 0.013523
+saving best model
+0m 16s
+Epoch 92/100
+----------
+LR 0.0001
+train: cce: 0.015009, dice: 0.008261, loss: 0.011635
+val: cce: 0.018968, dice: 0.009122, loss: 0.014045
+0m 16s
+Epoch 93/100
+----------
+LR 0.0001
+train: cce: 0.014945, dice: 0.008218, loss: 0.011582
+val: cce: 0.018742, dice: 0.009174, loss: 0.013958
+0m 16s
+Epoch 94/100
+----------
+LR 0.0001
+train: cce: 0.015029, dice: 0.008275, loss: 0.011652
+val: cce: 0.019018, dice: 0.009073, loss: 0.014046
+0m 16s
+Epoch 95/100
+----------
+LR 0.0001
+train: cce: 0.015002, dice: 0.008216, loss: 0.011609
+val: cce: 0.018870, dice: 0.009296, loss: 0.014083
+0m 16s
+Epoch 96/100
+----------
+LR 0.0001
+train: cce: 0.014684, dice: 0.008103, loss: 0.011394
+val: cce: 0.018714, dice: 0.008885, loss: 0.013800
+0m 15s
+Epoch 97/100
+----------
+LR 0.0001
+train: cce: 0.014876, dice: 0.008160, loss: 0.011518
+val: cce: 0.018888, dice: 0.009084, loss: 0.013986
+No improvements seen in 5 epochs. Initiating Early Stopping.
+Best val loss: 0.013523
