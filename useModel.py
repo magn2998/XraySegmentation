@@ -20,7 +20,7 @@ import Unet_old
 
 imageNo = "227"
 
-modelPath = "./results/Part1/128Images/model_11_24_09:46:40.pt"
+modelPath = "./results/Part1/32Images/model_2023-11-27094530.pt"
 predictionLocation = "./images/prediction72_1.png"
 IMG_HEIGHT = 496
 IMG_WIDTH = 496
@@ -103,8 +103,8 @@ combined_channels = np.maximum(pred[:, 1, :, :], pred[:, 2, :, :])
 combined_channels[combined_channels > 0.5] = 1.0
 
 # Set the second and third channels to the combined result
-pred[:, 1, :, :] = combined_channels
-pred[:, 2, :, :] = combined_channels
+# pred[:, 1, :, :] = combined_channels
+# pred[:, 2, :, :] = combined_channels
 
 # Read True Label
 blackmask = cv2.imread("./data/split_masks/black/" + imageLabel, 0) 

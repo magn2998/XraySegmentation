@@ -20,11 +20,11 @@ import os
 ### ---------------------------------------------------------------- ###
 
 BATCH_SIZE = 5
-SEGMENTS_WIDTH   = 32 # Height of individual segments, which are cropped section of the original image
-SEGMENTS_HEIGHT  = 32 # Same as above, just for height
+SEGMENTS_WIDTH   = 256 # Height of individual segments, which are cropped section of the original image
+SEGMENTS_HEIGHT  = 256 # Same as above, just for height
 SEGMENTS_OVERLAP = 10  # Pixels to overlap between segments
 
-modelPath = "./results/Part1/32Images/model_2023-11-27094530.pt" # Model to use
+modelPath = "./results/Part1/256Images/model_2023-11-28203144.pt" # Model to use
 
 
 
@@ -77,17 +77,11 @@ def merge_all_segments(img_arr, segments, seg_size, min_overlap):
             end_y = int(min(max(o - min_overlap, 0)+Hs-min_overlap/2, H))
 
             # Edge case - If last segment just goes to edge, just take entire thing
-            if max(i - min_overlap, 0)+Ws == W:
+            if max(i - min_overlap, 0)+Ws >= W:
                 end_x = W
-            if max(o - min_overlap, 0)+Hs == H:
+            if max(o - min_overlap, 0)+Hs >= H:
                 end_y = H
 
-
-            # If segments overflows, make segment so it covers rest while maintaining size
-            if start_x + Ws >= W:
-                start_x = int(W - Ws + min_overlap/2)
-            if start_y + Hs >= H:
-                start_y = int(H - Hs + min_overlap/2)
 
             # Now that we've computed the placements inside the full picture, compute the indexes from the segments
             segment_x = max(i - min_overlap, 0)

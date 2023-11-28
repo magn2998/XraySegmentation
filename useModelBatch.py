@@ -28,7 +28,7 @@ BATCH_SIZE = 5
 IMG_HEIGHT = 496
 IMG_WIDTH = 496
 
-modelPath = "./results/Part1/496Images/model_11_24_11:29:01.pt"
+modelPath = "./results/Part1/256Images/model_2023-11-28203144.pt"
 
 
 
@@ -76,9 +76,6 @@ def print_metrics(metrics, epoch_samples, phase):
 def crop800(image):
     return crop(image, 0, 0, IMG_HEIGHT, IMG_WIDTH)
 
-transformers = transforms.Compose([transforms.ToPILImage(),
-    transforms.Lambda(crop800),
-    transforms.ToTensor()])
 
 # Thanks to: https://pyimagesearch.com/2021/11/08/u-net-training-image-segmentation-models-in-pytorch/
 class SegmentationDataset(Dataset):

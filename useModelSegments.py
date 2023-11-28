@@ -9,16 +9,16 @@ import cv2
 import Unet_old
 
 imageNo = "227"
-modelPath = "./results/Part1/320Images/model_11_24_10:07:05.pt"
-predictionLocation = "./images/prediction69_3.png"
+modelPath = "./results/Part1/64Images/model_2023-11-27094955.pt"
+predictionLocation = "./images/prediction69.png"
 
 imagePath = "./data/data/SOCprist0" + imageNo + ".tiff"
 imageLabel = "slice__" + imageNo + ".tif"
 
 
 
-SEGMENTS_WIDTH   = 320 # Height of individual segments, which are cropped section of the original image
-SEGMENTS_HEIGHT  = 320 # Same as above, just for height
+SEGMENTS_WIDTH   = 64 # Height of individual segments, which are cropped section of the original image
+SEGMENTS_HEIGHT  = 64 # Same as above, just for height
 SEGMENTS_OVERLAP = 10  # Pixels to overlap between segments
 
 
@@ -74,13 +74,6 @@ def merge_all_segments(img_arr, segments, seg_size, min_overlap):
                 end_x = W
             if max(o - min_overlap, 0)+Hs == H:
                 end_y = H
-
-
-            # If segments overflows, make segment so it covers rest while maintaining size
-            if start_x + Ws >= W:
-                start_x = int(W - Ws + min_overlap/2)
-            if start_y + Hs >= H:
-                start_y = int(H - Hs + min_overlap/2)
 
             # Now that we've computed the placements inside the full picture, compute the indexes from the segments
             segment_x = max(i - min_overlap, 0)
