@@ -11,4 +11,4 @@ Analysing next picture!
 Analysing next picture!
 Analysing next picture!
 Analysing next picture!
-val: cce: 0.037083, dice: 0.022182, loss: 0.029633
+val: cce: 0.019979, dice: 0.011199, loss: 0.015589
