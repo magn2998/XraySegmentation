@@ -26,11 +26,21 @@ import Unet_old
 
 BATCH_SIZE = 5
 IMG_HEIGHT = 496
-IMG_WIDTH = 496
-
-modelPath = "./results/Part1/256Images/model_2023-11-28203144.pt"
+IMG_WIDTH = IMG_HEIGHT
 
 
+# modelPath = "./results/Part1/32Images/model_2023-11-27094530.pt"
+# modelPath = "./results/Part1/64Images/model_2023-11-27094955.pt"
+# modelPath = "./results/Part1/128Images/model_11_24_09:46:40.pt"
+# modelPath = "./results/Part1/256Images/model_2023-11-28203144.pt"
+# modelPath = "./results/Part1/320Images/model_11_24_10:07:05.pt"
+# modelPath = "./results/Part1/352Images/model_2023-11-27093719.pt"
+# modelPath = "./results/Part1/416Images/model_11_24_10:40:23.pt"
+# modelPath = "./results/Part1/496Images/model_11_24_11:29:01.pt"
+
+modelPath = "./data/model_2023-12-02201130.pt"
+
+print("Testing model: " + modelPath + " on image size " + str(IMG_HEIGHT))
 
 # Setup Device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -61,8 +71,23 @@ def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     metrics['dice'] += dice.data.cpu().numpy() * target.size(0)
     metrics['loss'] += loss.data.cpu().numpy() * target.size(0)
 
+    calc_pixel_accuracy(pred, target, metrics)
+
     return loss
 
+def calc_pixel_accuracy(pred, target, metrics):
+
+    # Calculate the number of correctly predicted pixels
+    correct_pixels = torch.sum(torch.abs(pred - target) <= 0.01).item()
+
+    # Calculate the total number of pixels
+    total_pixels = torch.prod(torch.tensor(target.shape)).item()
+
+    # Calculate pixel accuracy
+    accuracy = correct_pixels / total_pixels
+
+    metrics['pixelAcc'] += accuracy * target.size(0)
+    return accuracy
 
 def print_metrics(metrics, epoch_samples, phase):
     outputs = []
@@ -170,7 +195,7 @@ images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred, difference]
 nrow = pred.shape[0]
 ncol = len(images)
 # Create a 5x3 subplot grid
-fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 5, nrow * 5)) # Adjust figsize as needed
+fig, axs = plt.subplots(nrow, ncol, sharex='all', sharey='all', figsize=(ncol * 5.6, nrow * 5)) # Adjust figsize as needed
 
 for i in range(len(images)):  # For each of the 4 pictures
     for j in range(5):  # For each of the 5 versions
@@ -181,11 +206,11 @@ for i in range(len(images)):  # For each of the 4 pictures
             fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
         else:
             ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
-            if i == ncol - 2:
-                ax.text(0.5, -0.1, img_names[j], fontsize=12, ha='center', va='center', transform=ax.transAxes)
+            # if i == ncol - 2:
+            #     ax.text(0.5, -0.1, img_names[j], fontsize=12, ha='center', va='center', transform=ax.transAxes)
             
             
 plt.tight_layout()
 plt.show()
 filename =  time.strftime("%Y-%m-%d%H%M%S")
-plt.savefig('./images/picture_batchtest_' + filename + ".png")
+plt.savefig('./images/picture_batchtest_' + str(IMG_HEIGHT) + '_' + filename + ".png")

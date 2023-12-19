@@ -20,14 +20,21 @@ import os
 ### ---------------------------------------------------------------- ###
 
 BATCH_SIZE = 5
-SEGMENTS_WIDTH   = 256 # Height of individual segments, which are cropped section of the original image
-SEGMENTS_HEIGHT  = 256 # Same as above, just for height
+SEGMENTS_WIDTH   = 496 # Height of individual segments, which are cropped section of the original image
+SEGMENTS_HEIGHT  = SEGMENTS_WIDTH # Same as above, just for height
 SEGMENTS_OVERLAP = 10  # Pixels to overlap between segments
 
-modelPath = "./results/Part1/256Images/model_2023-11-28203144.pt" # Model to use
+# modelPath = "./results/Part1/32Images/model_2023-11-27094530.pt"
+# modelPath = "./results/Part1/64Images/model_2023-11-27094955.pt"
+# modelPath = "./results/Part1/128Images/model_11_24_09:46:40.pt"
+# modelPath = "./results/Part1/256Images/model_2023-11-28203144.pt"
+# modelPath = "./results/Part1/320Images/model_11_24_10:07:05.pt"
+# modelPath = "./results/Part1/352Images/model_2023-11-27093719.pt"
+# modelPath = "./results/Part1/416Images/model_11_24_10:40:23.pt"
+modelPath = "./results/Part1/496Images/model_11_24_11:29:01.pt"
 
 
-
+print("Testing model: " + modelPath + " on full image w. section size " + str(SEGMENTS_WIDTH))
 
 # Setup Device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -162,20 +169,34 @@ def dice_loss(pred, target):
 def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     cce = criterion(pred, target)
 
-    SoftMaxFunc = nn.Softmax2d()
+    SoftMaxFunc = torch.nn.Softmax2d()
     pred = SoftMaxFunc(pred)
 
     dice = dice_loss(pred, target)
-    # IoU = IoU_loss(pred, target)
-    # print(IoU)
-
     loss = cce * bce_weight + dice * (1 - bce_weight)
 
     metrics['cce'] += cce.data.cpu().numpy() * target.size(0)
     metrics['dice'] += dice.data.cpu().numpy() * target.size(0)
     metrics['loss'] += loss.data.cpu().numpy() * target.size(0)
 
+    calc_pixel_accuracy(pred, target, metrics)
+
     return loss
+
+def calc_pixel_accuracy(pred, target, metrics):
+
+    # Calculate the number of correctly predicted pixels
+    correct_pixels = torch.sum(torch.abs(pred - target) <= 0.01).item()
+
+    # Calculate the total number of pixels
+    total_pixels = torch.prod(torch.tensor(target.shape)).item()
+
+    # Calculate pixel accuracy
+    accuracy = correct_pixels / total_pixels
+
+    metrics['pixelAcc'] += accuracy * target.size(0)
+    return accuracy
+
 
 
 def print_metrics(metrics, epoch_samples, phase):
