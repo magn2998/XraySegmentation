@@ -1,0 +1,55 @@
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/32Images/model_2023-11-27094530.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.030008, dice: 0.015378, loss: 0.022693, pixelAcc: 0.957786
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/64Images/model_2023-11-27094955.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.030045, dice: 0.014844, loss: 0.022445, pixelAcc: 0.958651
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/128Images/model_11_24_09:46:40.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.026878, dice: 0.014472, loss: 0.020675, pixelAcc: 0.957724
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/256Images/model_2023-11-28203144.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.019972, dice: 0.011179, loss: 0.015576, pixelAcc: 0.968612
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/320Images/model_11_24_10:07:05.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.016401, dice: 0.008590, loss: 0.012495, pixelAcc: 0.977927
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/352Images/model_2023-11-27093719.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.015568, dice: 0.008245, loss: 0.011906, pixelAcc: 0.978722
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/416Images/model_11_24_10:40:23.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.015641, dice: 0.008186, loss: 0.011913, pixelAcc: 0.979273
+(.venv) ~/Desktop/DeepLearning/Project28
+
+
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/496Images/model_11_24_11:29:01.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.014560, dice: 0.007528, loss: 0.011044, pixelAcc: 0.981197
+(.venv) ~/Desktop/DeepLearning/Project28

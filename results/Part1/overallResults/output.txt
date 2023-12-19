@@ -1,0 +1,54 @@
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/32Images/model_2023-11-27094530.pt on image size 32
+Device Used: cuda:0
+val: cce: 0.045188, dice: 0.396800, loss: 0.220994, pixelAcc: 0.958073
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/64Images/model_2023-11-27094955.pt on image size 64
+Device Used: cuda:0
+val: cce: 0.027935, dice: 0.164570, loss: 0.096252, pixelAcc: 0.963460
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/128Images/model_11_24_09:46:40.pt on image size 128
+Device Used: cuda:0
+val: cce: 0.022004, dice: 0.017063, loss: 0.019534, pixelAcc: 0.957963
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/256Images/model_2023-11-28203144.pt on image size 256
+Device Used: cuda:0
+val: cce: 0.020049, dice: 0.012414, loss: 0.016231, pixelAcc: 0.968236
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/320Images/model_11_24_10:07:05.pt on image size 320
+Device Used: cuda:0
+val: cce: 0.015890, dice: 0.009186, loss: 0.012538, pixelAcc: 0.977537
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/352Images/model_2023-11-27093719.pt on image size 352
+Device Used: cuda:0
+val: cce: 0.016737, dice: 0.009073, loss: 0.012905, pixelAcc: 0.977605
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/416Images/model_11_24_10:40:23.pt on image size 416
+Device Used: cuda:0
+val: cce: 0.016358, dice: 0.008576, loss: 0.012467, pixelAcc: 0.978704
+
+
+(.venv) ~/Desktop/DeepLearning/Project28
+n-62-20-1(s204509) $ python3 useModelBatch.py 
+Testing model: ./results/Part1/496Images/model_11_24_11:29:01.pt on image size 496
+Device Used: cuda:0
+val: cce: 0.014560, dice: 0.007528, loss: 0.011044, pixelAcc: 0.981197
