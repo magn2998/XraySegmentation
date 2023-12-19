@@ -37,11 +37,6 @@ crop_x = 0
 crop_y = 0
 crop_v = True # When creating figure, we want to always start at (0,0) - Makes comparison much easier - this variable enables/disables this
 
-print("IMAGE HEIGHT: " + str(IMG_HEIGHT))
-print("IMAGE WIDTH: " + str(IMG_WIDTH))
-print("MAX EPOCHS: " + str(EPOCHS))
-print("NUM SAMPLES: " + str(NUM_SAMPLES))
-
 # To Crop Images - Placement on picture is random every time to increase dataset
 def crop_rnd(image):
     if crop_v:
@@ -295,6 +290,12 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
 
 # Initiate the architecture and train the model
 def run(UNet):
+    print("IMAGE HEIGHT: " + str(IMG_HEIGHT))
+    print("IMAGE WIDTH: " + str(IMG_WIDTH))
+    print("MAX EPOCHS: " + str(EPOCHS))
+    print("NUM SAMPLES: " + str(NUM_SAMPLES))
+
+
     num_class = 3 # Classes = 3 as there are three segmentation classes
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Device Used: " + str(device))
