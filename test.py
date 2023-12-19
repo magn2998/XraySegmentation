@@ -26,8 +26,8 @@ import random
 
 # Global Variables
 batch_size = 5
-IMG_HEIGHT = 16
-IMG_WIDTH = 16
+IMG_HEIGHT = 496
+IMG_WIDTH = 496
 EPOCHS = 100
 NUM_SAMPLES = -1 # Set to -1 to disable
 
@@ -262,10 +262,11 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
             epoch_accuracy = metrics['pixelAcc'] / epoch_samples
 
             # deep copy the model
-            if phase == 'val' and epoch_loss < best_loss and best_accuracy < epoch_accuracy:
+            if phase == 'val' and epoch_loss < best_loss:
                 print("saving best model")
                 best_loss = epoch_loss
-                best_accuracy = epoch_accuracy
+                if(epoch_accuracy > best_accuracy):
+                    best_accuracy = epoch_accuracy
                 best_model_wts = copy.deepcopy(model.state_dict())
                 counter = 0
             elif phase == 'val':
