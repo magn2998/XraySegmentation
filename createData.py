@@ -1,23 +1,13 @@
-import matplotlib_terminal
-import matplotlib.pyplot as plt
+# ------------------------------------------------------------ #
+# ------------------------------------------------------------ #
+# THIS FILE IS USED TO SPLIT THE LABELED DATA INTO THREE MASKS #
+# ------------ ONE MASK FOR EACH SEGMENTATION CLASS -----------#
+# ------------------------------------------------------------ #
+
+
 import numpy as np
-import random
-from functools import reduce
-import itertools
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, datasets, models
-from torchvision.transforms.functional import crop
-from collections import defaultdict
-import torch.nn.functional as F
-import torch
-import torch.optim as optim
-from torch.optim import lr_scheduler
-import time
-import copy
-from sklearn.model_selection import train_test_split
 from imutils import paths
 import cv2
-import sys
 import os
 
 

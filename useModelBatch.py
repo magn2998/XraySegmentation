@@ -24,7 +24,7 @@ import Unet_old
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-def Use_Model_On_Batch_Of_Validation_Set ( imgSize, modelPath, saveFig ):
+def Use_Model_On_Batch_Of_Validation_Set ( imgSize, modelPath, saveFig, useCpu):
     BATCH_SIZE = 5
     IMG_HEIGHT = imgSize
     IMG_WIDTH = imgSize
@@ -166,7 +166,10 @@ def Use_Model_On_Batch_Of_Validation_Set ( imgSize, modelPath, saveFig ):
 
     # Setup Model
     model = Unet_old.UNet(3).to(device)
-    model.load_state_dict(torch.load(modelPath))
+    if useCpu:
+        model.load_state_dict(torch.load(modelPath, map_location=torch.device('cpu')))
+    else:
+        model.load_state_dict(torch.load(modelPath))
     model.eval() 
 
     # Make Prediction
