@@ -114,3 +114,15 @@ def Plot_Scatter_Plot(saveFig):
 
 # plt.clf()
 
+
+# #PART 2 PLOTS (Num samples vs loss) 
+#num_samples = [85, 170, 255, 340, 425]
+#loss = [0.024129, 0.021603, 0.017634, 0.016905, 0.013905]
+
+# Plotting
+#plt.plot(num_samples, loss, marker='o')
+#plt.title('Number of Samples vs Validation Loss')
+#plt.xlabel('Number of Samples')
+#plt.ylabel('Validation Loss')
+#plt.grid(True)
+
