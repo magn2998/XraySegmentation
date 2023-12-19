@@ -21,14 +21,14 @@ import Unet_old
 imageNo = "227"
 
 modelPath = "./results/Part1/32Images/model_2023-11-27094530.pt"
-predictionLocation = "./images/prediction72_1.png"
-IMG_HEIGHT = 496
-IMG_WIDTH = 496
+predictionLocation = "./images/IMPOSSIBLE_1_output.png"
+IMG_HEIGHT = 944
+IMG_WIDTH = 944
 
 
 imageLabel = "slice__" + imageNo + ".tif"
-imagePath = "./data/data/SOCprist0" + imageNo + ".tiff"
-
+#imagePath = "./data/data/SOCprist0" + imageNo + ".tiff"
+imagePath = "./images/1IMPOSSIBLE.bmp"
 
 # Setup Device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

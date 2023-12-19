@@ -22,8 +22,13 @@ import random
 
 # Global Variables
 batch_size = 5
+<<<<<<< HEAD
+IMG_HEIGHT = 16
+IMG_WIDTH = 16
+=======
 IMG_HEIGHT = 496
 IMG_WIDTH = 496
+>>>>>>> 281b61b22c8ad74e3e72d8c3bbaee409268e8e96
 EPOCHS = 100
 NUM_SAMPLES = -1 # Set to -1 to disable
 
