@@ -1,0 +1,30 @@
+For image size 320x320
+
+85
+Best val loss: 0.024129
+Best accuracy: 0.940763
+
+170
+Best val loss: 0.021603
+Best accuracy: 0.965152
+
+255
+Best val loss: 0.017634
+Best accuracy: 0.978264
+
+340
+Best val loss: 0.016905
+Best accuracy: 0.968903
+
+425
+Best val loss: 0.013905
+Best accuracy: 0.972835
+
+For image size 496x496
+255 
+Best val loss: 0.016038
+Best accuracy: 0.978264
+
+340 
+Best val loss: 0.015142
+Best accuracy: 0.976764

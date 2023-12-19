@@ -434,3 +434,373 @@ train: cce: 0.019479, dice: 0.010581, loss: 0.015030
 val: cce: 0.022648, dice: 0.011207, loss: 0.016927
 No improvements seen in 5 epochs. Initiating Early Stopping.
 Best val loss: 0.016905
+
+Second run with accuracy
+IMAGE HEIGHT: 320
+IMAGE WIDTH: 320
+MAX EPOCHS: 100
+NUM SAMPLES: 340
+Device Used: cuda:0
+Epoch 1/100
+----------
+LR 0.0001
+train: cce: 0.874389, dice: 0.550701, loss: 0.712545, pixelAcc: 0.081307
+val: cce: 0.431664, dice: 0.294317, loss: 0.362991, pixelAcc: 0.309641
+saving best model
+0m 27s
+Epoch 2/100
+----------
+LR 0.0001
+train: cce: 0.253897, dice: 0.144435, loss: 0.199166, pixelAcc: 0.494642
+val: cce: 0.160686, dice: 0.084533, loss: 0.122610, pixelAcc: 0.650398
+saving best model
+0m 20s
+Epoch 3/100
+----------
+LR 0.0001
+train: cce: 0.143775, dice: 0.073833, loss: 0.108804, pixelAcc: 0.740431
+val: cce: 0.119399, dice: 0.062457, loss: 0.090928, pixelAcc: 0.799825
+saving best model
+0m 20s
+Epoch 4/100
+----------
+LR 0.0001
+train: cce: 0.100495, dice: 0.052425, loss: 0.076460, pixelAcc: 0.837408
+val: cce: 0.082059, dice: 0.044526, loss: 0.063293, pixelAcc: 0.849957
+saving best model
+0m 19s
+Epoch 5/100
+----------
+LR 0.0001
+train: cce: 0.069260, dice: 0.037081, loss: 0.053170, pixelAcc: 0.881432
+val: cce: 0.058747, dice: 0.030985, loss: 0.044866, pixelAcc: 0.902265
+saving best model
+0m 19s
+Epoch 6/100
+----------
+LR 0.0001
+train: cce: 0.054921, dice: 0.029023, loss: 0.041972, pixelAcc: 0.909557
+val: cce: 0.078101, dice: 0.035772, loss: 0.056936, pixelAcc: 0.907389
+0m 21s
+Epoch 7/100
+----------
+LR 0.0001
+train: cce: 0.049374, dice: 0.026581, loss: 0.037977, pixelAcc: 0.916082
+val: cce: 0.047383, dice: 0.024652, loss: 0.036018, pixelAcc: 0.923266
+saving best model
+0m 19s
+Epoch 8/100
+----------
+LR 0.0001
+train: cce: 0.043836, dice: 0.023397, loss: 0.033616, pixelAcc: 0.926472
+val: cce: 0.042540, dice: 0.022682, loss: 0.032611, pixelAcc: 0.927153
+saving best model
+0m 18s
+Epoch 9/100
+----------
+LR 0.0001
+train: cce: 0.041866, dice: 0.022293, loss: 0.032080, pixelAcc: 0.930026
+val: cce: 0.040854, dice: 0.021847, loss: 0.031350, pixelAcc: 0.930031
+saving best model
+0m 19s
+Epoch 10/100
+----------
+LR 0.0001
+train: cce: 0.039277, dice: 0.020979, loss: 0.030128, pixelAcc: 0.934189
+val: cce: 0.044316, dice: 0.022168, loss: 0.033242, pixelAcc: 0.934840
+0m 18s
+Epoch 11/100
+----------
+LR 0.0001
+train: cce: 0.038105, dice: 0.020183, loss: 0.029144, pixelAcc: 0.937148
+val: cce: 0.039000, dice: 0.020114, loss: 0.029557, pixelAcc: 0.936529
+saving best model
+0m 18s
+Epoch 12/100
+----------
+LR 0.0001
+train: cce: 0.036385, dice: 0.019329, loss: 0.027857, pixelAcc: 0.940250
+val: cce: 0.038251, dice: 0.019372, loss: 0.028811, pixelAcc: 0.942391
+saving best model
+0m 22s
+Epoch 13/100
+----------
+LR 0.0001
+train: cce: 0.035476, dice: 0.018683, loss: 0.027080, pixelAcc: 0.942931
+val: cce: 0.037499, dice: 0.019084, loss: 0.028291, pixelAcc: 0.942893
+saving best model
+0m 20s
+Epoch 14/100
+----------
+LR 0.0001
+train: cce: 0.034769, dice: 0.018380, loss: 0.026574, pixelAcc: 0.944133
+val: cce: 0.037063, dice: 0.018576, loss: 0.027820, pixelAcc: 0.944790
+saving best model
+0m 19s
+Epoch 15/100
+----------
+LR 0.0001
+train: cce: 0.033053, dice: 0.017603, loss: 0.025328, pixelAcc: 0.946638
+val: cce: 0.034814, dice: 0.017731, loss: 0.026272, pixelAcc: 0.946664
+saving best model
+0m 20s
+Epoch 16/100
+----------
+LR 0.0001
+train: cce: 0.032230, dice: 0.017092, loss: 0.024661, pixelAcc: 0.948595
+val: cce: 0.037063, dice: 0.018179, loss: 0.027621, pixelAcc: 0.948364
+0m 20s
+Epoch 17/100
+----------
+LR 0.0001
+train: cce: 0.032389, dice: 0.017102, loss: 0.024746, pixelAcc: 0.949046
+val: cce: 0.036036, dice: 0.017541, loss: 0.026789, pixelAcc: 0.951464
+0m 20s
+Epoch 18/100
+----------
+LR 0.0001
+train: cce: 0.030707, dice: 0.016382, loss: 0.023544, pixelAcc: 0.950901
+val: cce: 0.030929, dice: 0.015847, loss: 0.023388, pixelAcc: 0.952677
+saving best model
+0m 20s
+Epoch 19/100
+----------
+LR 0.0001
+train: cce: 0.030300, dice: 0.016104, loss: 0.023202, pixelAcc: 0.952505
+val: cce: 0.030533, dice: 0.015994, loss: 0.023264, pixelAcc: 0.952540
+0m 19s
+Epoch 20/100
+----------
+LR 0.0001
+train: cce: 0.029119, dice: 0.015616, loss: 0.022367, pixelAcc: 0.953889
+val: cce: 0.031783, dice: 0.015902, loss: 0.023843, pixelAcc: 0.954210
+0m 19s
+Epoch 21/100
+----------
+LR 0.0001
+train: cce: 0.029253, dice: 0.015567, loss: 0.022410, pixelAcc: 0.954299
+val: cce: 0.031167, dice: 0.015738, loss: 0.023453, pixelAcc: 0.954355
+0m 20s
+Epoch 22/100
+----------
+LR 0.0001
+train: cce: 0.029390, dice: 0.015612, loss: 0.022501, pixelAcc: 0.954694
+val: cce: 0.030120, dice: 0.015225, loss: 0.022672, pixelAcc: 0.955492
+saving best model
+0m 20s
+Epoch 23/100
+----------
+LR 0.0001
+train: cce: 0.027520, dice: 0.014755, loss: 0.021138, pixelAcc: 0.956737
+val: cce: 0.029072, dice: 0.014899, loss: 0.021985, pixelAcc: 0.957311
+saving best model
+0m 21s
+Epoch 24/100
+----------
+LR 0.0001
+train: cce: 0.027154, dice: 0.014508, loss: 0.020831, pixelAcc: 0.957861
+val: cce: 0.030685, dice: 0.015239, loss: 0.022962, pixelAcc: 0.958560
+0m 20s
+Epoch 25/100
+----------
+LR 0.0001
+train: cce: 0.027598, dice: 0.014648, loss: 0.021123, pixelAcc: 0.958025
+val: cce: 0.030658, dice: 0.015073, loss: 0.022865, pixelAcc: 0.959290
+0m 19s
+Epoch 26/100
+----------
+LR 0.0001
+train: cce: 0.026855, dice: 0.014341, loss: 0.020598, pixelAcc: 0.958213
+val: cce: 0.028435, dice: 0.014613, loss: 0.021524, pixelAcc: 0.957916
+saving best model
+0m 19s
+Epoch 27/100
+----------
+LR 0.0001
+train: cce: 0.027811, dice: 0.014649, loss: 0.021230, pixelAcc: 0.958529
+val: cce: 0.029556, dice: 0.014997, loss: 0.022276, pixelAcc: 0.956815
+0m 20s
+Epoch 28/100
+----------
+LR 0.0001
+train: cce: 0.025982, dice: 0.014098, loss: 0.020040, pixelAcc: 0.959146
+val: cce: 0.029773, dice: 0.014578, loss: 0.022176, pixelAcc: 0.960077
+0m 20s
+Epoch 29/100
+----------
+LR 0.0001
+train: cce: 0.025288, dice: 0.013608, loss: 0.019448, pixelAcc: 0.960735
+val: cce: 0.027163, dice: 0.013556, loss: 0.020359, pixelAcc: 0.962094
+saving best model
+0m 20s
+Epoch 30/100
+----------
+LR 0.0001
+train: cce: 0.025050, dice: 0.013414, loss: 0.019232, pixelAcc: 0.961702
+val: cce: 0.028710, dice: 0.014258, loss: 0.021484, pixelAcc: 0.960564
+0m 19s
+Epoch 31/100
+----------
+LR 0.0001
+train: cce: 0.024701, dice: 0.013298, loss: 0.018999, pixelAcc: 0.961833
+val: cce: 0.027308, dice: 0.013546, loss: 0.020427, pixelAcc: 0.962715
+0m 20s
+Epoch 32/100
+----------
+LR 0.0001
+train: cce: 0.024369, dice: 0.013053, loss: 0.018711, pixelAcc: 0.962996
+val: cce: 0.026088, dice: 0.013396, loss: 0.019742, pixelAcc: 0.961998
+0m 19s
+Epoch 33/100
+----------
+LR 0.0001
+train: cce: 0.024082, dice: 0.012982, loss: 0.018532, pixelAcc: 0.962881
+val: cce: 0.027452, dice: 0.013938, loss: 0.020695, pixelAcc: 0.961460
+0m 18s
+Epoch 34/100
+----------
+LR 0.0001
+train: cce: 0.023701, dice: 0.012773, loss: 0.018237, pixelAcc: 0.963601
+val: cce: 0.025778, dice: 0.013066, loss: 0.019422, pixelAcc: 0.963794
+saving best model
+0m 19s
+Epoch 35/100
+----------
+LR 0.0001
+train: cce: 0.023646, dice: 0.012695, loss: 0.018171, pixelAcc: 0.964135
+val: cce: 0.026277, dice: 0.013052, loss: 0.019664, pixelAcc: 0.963858
+0m 19s
+Epoch 36/100
+----------
+LR 0.0001
+train: cce: 0.022960, dice: 0.012465, loss: 0.017713, pixelAcc: 0.964492
+val: cce: 0.025570, dice: 0.012740, loss: 0.019155, pixelAcc: 0.965435
+saving best model
+0m 19s
+Epoch 37/100
+----------
+LR 0.0001
+train: cce: 0.023068, dice: 0.012434, loss: 0.017751, pixelAcc: 0.964887
+val: cce: 0.026186, dice: 0.012818, loss: 0.019502, pixelAcc: 0.965278
+0m 20s
+Epoch 38/100
+----------
+LR 0.0001
+train: cce: 0.022905, dice: 0.012352, loss: 0.017629, pixelAcc: 0.965229
+val: cce: 0.024065, dice: 0.012565, loss: 0.018315, pixelAcc: 0.964894
+0m 19s
+Epoch 39/100
+----------
+LR 0.0001
+train: cce: 0.023361, dice: 0.012510, loss: 0.017936, pixelAcc: 0.964977
+val: cce: 0.025094, dice: 0.012953, loss: 0.019023, pixelAcc: 0.963913
+0m 19s
+Epoch 40/100
+----------
+LR 0.0001
+train: cce: 0.022794, dice: 0.012348, loss: 0.017571, pixelAcc: 0.965061
+val: cce: 0.025494, dice: 0.012788, loss: 0.019141, pixelAcc: 0.964968
+0m 19s
+Epoch 41/100
+----------
+LR 0.0001
+train: cce: 0.022353, dice: 0.012139, loss: 0.017246, pixelAcc: 0.965828
+val: cce: 0.025695, dice: 0.012903, loss: 0.019299, pixelAcc: 0.965034
+0m 20s
+Epoch 42/100
+----------
+LR 0.0001
+train: cce: 0.021845, dice: 0.011893, loss: 0.016869, pixelAcc: 0.966705
+val: cce: 0.024526, dice: 0.012469, loss: 0.018497, pixelAcc: 0.966070
+saving best model
+0m 21s
+Epoch 43/100
+----------
+LR 0.0001
+train: cce: 0.022100, dice: 0.011991, loss: 0.017046, pixelAcc: 0.966467
+val: cce: 0.025619, dice: 0.012691, loss: 0.019155, pixelAcc: 0.966029
+0m 21s
+Epoch 44/100
+----------
+LR 0.0001
+train: cce: 0.021108, dice: 0.011574, loss: 0.016341, pixelAcc: 0.967488
+val: cce: 0.024535, dice: 0.012150, loss: 0.018343, pixelAcc: 0.967743
+saving best model
+0m 20s
+Epoch 45/100
+----------
+LR 0.0001
+train: cce: 0.021406, dice: 0.011655, loss: 0.016531, pixelAcc: 0.967701
+val: cce: 0.025099, dice: 0.012369, loss: 0.018734, pixelAcc: 0.967815
+0m 19s
+Epoch 46/100
+----------
+LR 0.0001
+train: cce: 0.021092, dice: 0.011517, loss: 0.016304, pixelAcc: 0.967835
+val: cce: 0.023372, dice: 0.011932, loss: 0.017652, pixelAcc: 0.967517
+0m 19s
+Epoch 47/100
+----------
+LR 0.0001
+train: cce: 0.020925, dice: 0.011386, loss: 0.016156, pixelAcc: 0.968343
+val: cce: 0.023964, dice: 0.012292, loss: 0.018128, pixelAcc: 0.966577
+0m 19s
+Epoch 48/100
+----------
+LR 0.0001
+train: cce: 0.020706, dice: 0.011328, loss: 0.016017, pixelAcc: 0.968399
+val: cce: 0.024014, dice: 0.011913, loss: 0.017963, pixelAcc: 0.968387
+saving best model
+0m 20s
+Epoch 49/100
+----------
+LR 0.0001
+train: cce: 0.020656, dice: 0.011284, loss: 0.015970, pixelAcc: 0.968670
+val: cce: 0.023480, dice: 0.011722, loss: 0.017601, pixelAcc: 0.968660
+saving best model
+0m 21s
+Epoch 50/100
+----------
+LR 0.0001
+train: cce: 0.020308, dice: 0.011099, loss: 0.015704, pixelAcc: 0.969222
+val: cce: 0.022921, dice: 0.011636, loss: 0.017279, pixelAcc: 0.968903
+saving best model
+0m 20s
+Epoch 51/100
+----------
+LR 0.0001
+train: cce: 0.021178, dice: 0.011460, loss: 0.016319, pixelAcc: 0.968419
+val: cce: 0.023450, dice: 0.011673, loss: 0.017561, pixelAcc: 0.968566
+0m 20s
+Epoch 52/100
+----------
+LR 0.0001
+train: cce: 0.020854, dice: 0.011384, loss: 0.016119, pixelAcc: 0.968526
+val: cce: 0.023186, dice: 0.011624, loss: 0.017405, pixelAcc: 0.968933
+0m 20s
+Epoch 53/100
+----------
+LR 0.0001
+train: cce: 0.020327, dice: 0.011119, loss: 0.015723, pixelAcc: 0.969325
+val: cce: 0.023659, dice: 0.011877, loss: 0.017768, pixelAcc: 0.968753
+0m 20s
+Epoch 54/100
+----------
+LR 0.0001
+train: cce: 0.019633, dice: 0.010814, loss: 0.015223, pixelAcc: 0.969827
+val: cce: 0.023709, dice: 0.011578, loss: 0.017643, pixelAcc: 0.969853
+0m 18s
+Epoch 55/100
+----------
+LR 0.0001
+train: cce: 0.019960, dice: 0.010902, loss: 0.015431, pixelAcc: 0.969974
+val: cce: 0.023283, dice: 0.011534, loss: 0.017408, pixelAcc: 0.969736
+0m 19s
+Epoch 56/100
+----------
+LR 0.0001
+train: cce: 0.019481, dice: 0.010682, loss: 0.015081, pixelAcc: 0.970469
+val: cce: 0.023796, dice: 0.011613, loss: 0.017704, pixelAcc: 0.970405
+No improvements seen in 5 epochs. Initiating Early Stopping.
+Best val loss: 0.017279
+Best accuracy: 0.968903
