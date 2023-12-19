@@ -30,6 +30,7 @@ IMG_HEIGHT = 496
 IMG_WIDTH = 496
 EPOCHS = 100
 NUM_SAMPLES = -1 # Set to -1 to disable
+SAVE_MODEL_AND_FIGURE = False
 
 # Auxillary Global Variables (Used for random cropping - see crop_rnd - dont change values)
 crop_x = 0
@@ -349,8 +350,10 @@ def run(UNet):
     plt.tight_layout()
     plt.show()
     filename =  time.strftime("%Y-%m-%d%H%M%S")
-    plt.savefig('./images/picture_training_' + filename + ".png")
 
 
-    # Save the model for future use!
-    torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
+    if SAVE_MODEL_AND_FIGURE:
+        # Save the figure
+        plt.savefig('./images/picture_training_' + filename + ".png")
+        # Save the model for future use!
+        torch.save(model.state_dict(), "./data/model_" + filename + ".pt")

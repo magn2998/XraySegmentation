@@ -126,9 +126,4 @@ class UNet(nn.Module):
 
         return out
 
-import test
-
-test.run(UNet)
-
-
 
