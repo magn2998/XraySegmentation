@@ -1,7 +1,7 @@
 # XraySegmentation
 
 We've included a Jupyter Notebook that shows how to create the different results seen in the related paper.
-Find this notebook in Project28.ipynb.
+Find this notebook in **Project28.ipynb**.
 
 
 **Short Description of Project:**
