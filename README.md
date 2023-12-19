@@ -1,4 +1,11 @@
 # XraySegmentation
+
+We've included a Jupyter Notebook that shows how to create the different results seen in the related paper.
+Find this notebook in Project28.ipynb.
+
+
+**Short Description of Project:**
+
 For this project, a deep convolutional network will be created and trained in order to perform good automated segmentation of X-ray images. The dataset thus consists of these X-ray images that are in grayscale and various sizes. Raw and segmented images are included in this dataset, which will be used for training and validating the network.
 
 We will divide the project into three phases. In the first phase, we will focus on finding candidates for the network architectures, and choose one (or more) to focus on. This phase will mostly consist of researching and exploring the current development in regards to deep convolutional networks.
