@@ -44,21 +44,40 @@ plt.show()
 plt.clf()
 
 
-
-#PART 2 PLOTS
+#PART 2 PLOTS (Num samples vs performance) 
 num_samples = [85, 170, 255, 340, 425]
-loss = [0.024129, 0.021603, 0.017634, 0.016905, 0.013905]
+accuracy = [0.940763, 0.965152, 0.971517, 0.968903, 0.972835]
 
 
 # Plotting
-plt.plot(num_samples, loss, marker='o')
-plt.title('Number of Samples vs Performance')
+plt.plot(num_samples, accuracy, marker='o')
+plt.title('Number of Samples vs accuracy')
 plt.xlabel('Number of Samples')
-plt.ylabel('Validation Loss')
+plt.ylabel('Pixel Accuracy')
 plt.grid(True)
 
 # Save the plot as a PNG file
-plt.savefig('./results/Part2/samples_vs_performance_plot.png')
+plt.savefig('./results/Part2/samples_vs_accuracy_plot.png')
+
+# Display the plot (optional)
+plt.show()
+
+
+plt.clf()
+
+#Part 3 PLOT (Num pixels vs performance)
+num_pixels = [128*128*425,85*320*320, 170*320*320, 255*320*320, 340*320*320, 425*320*320,  320*320*425,416*416*425,496*496*425 ]
+accuracy = [0.948294,0.940763, 0.965152, 0.971517, 0.968903, 0.972835, 0.976131, 0.975655,0.981708]
+
+# Plotting
+plt.plot(num_pixels, accuracy, marker='o')
+plt.title('Number of Pixels vs accuracy')
+plt.xlabel('Number of Pixels')
+plt.ylabel('Pixel Accuracy')
+plt.grid(True)
+
+# Save the plot as a PNG file
+plt.savefig('./results/pixels_vs_accuracy_plot.png')
 
 # Display the plot (optional)
 plt.show()

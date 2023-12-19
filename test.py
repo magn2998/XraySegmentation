@@ -22,8 +22,13 @@ import random
 
 # Global Variables
 batch_size = 5
+<<<<<<< HEAD
 IMG_HEIGHT = 16
 IMG_WIDTH = 16
+=======
+IMG_HEIGHT = 496
+IMG_WIDTH = 496
+>>>>>>> 281b61b22c8ad74e3e72d8c3bbaee409268e8e96
 EPOCHS = 100
 NUM_SAMPLES = -1 # Set to -1 to disable
 
@@ -146,7 +151,7 @@ def IoU_loss(pred, target):
     target = target.contiguous()
 
     intersection = (pred * target).sum(dim=2).sum(dim=2)
-    union = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) - intersection;
+    union = pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) - intersection
     
     IoU = intersection/union
 
@@ -170,6 +175,23 @@ def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
 
     return loss
 
+def calc_pixel_accuracy(pred, target, metrics):
+
+    SoftMaxFunc = nn.Softmax2d()
+    pred = SoftMaxFunc(pred)
+
+    # Calculate the number of correctly predicted pixels
+    correct_pixels = torch.sum(torch.abs(pred - target) <= 0.01).item()
+
+    # Calculate the total number of pixels
+    total_pixels = torch.prod(torch.tensor(target.shape)).item()
+
+    # Calculate pixel accuracy
+    accuracy = correct_pixels / total_pixels
+
+    metrics['pixelAcc'] += accuracy * target.size(0)
+    return accuracy
+
 
 def print_metrics(metrics, epoch_samples, phase):
     outputs = []
@@ -184,6 +206,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     best_model_wts = copy.deepcopy(model.state_dict())
     best_loss = 1e10
+    best_accuracy = 0
     criterion = nn.CrossEntropyLoss()
 
     # Early Stopping Variables
@@ -221,7 +244,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     loss = calc_loss(outputs, labels, metrics, criterion)
-
+                    accuracy = calc_pixel_accuracy(outputs, labels, metrics)
                     # backward + optimize only if in training phase
                     if phase == 'train':
                         loss.backward()
@@ -233,11 +256,13 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
 
             print_metrics(metrics, epoch_samples, phase)
             epoch_loss = metrics['loss'] / epoch_samples
+            epoch_accuracy = metrics['pixelAcc'] / epoch_samples
 
             # deep copy the model
-            if phase == 'val' and epoch_loss < best_loss:
+            if phase == 'val' and epoch_loss < best_loss and best_accuracy < epoch_accuracy:
                 print("saving best model")
                 best_loss = epoch_loss
+                best_accuracy = epoch_accuracy
                 best_model_wts = copy.deepcopy(model.state_dict())
                 counter = 0
             elif phase == 'val':
@@ -247,6 +272,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
                 if counter > tolerance:
                     print("No improvements seen in " + str(tolerance) + " epochs. Initiating Early Stopping.")
                     print('Best val loss: {:4f}'.format(best_loss))
+                    print('Best accuracy: {:4f}'.format(best_accuracy))
                     model.load_state_dict(best_model_wts) # Load and return best model
                     return model
             
@@ -255,6 +281,7 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
         print('{:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
 
     print('Best val loss: {:4f}'.format(best_loss))
+    print('Best accuracy: {:4f}'.format(best_accuracy))
 
     # load best model weights
     model.load_state_dict(best_model_wts)
@@ -295,6 +322,7 @@ def run(UNet):
     # Normalize the difference values to be in the range [0, 1]
     images = [inputs.cpu().numpy(),  labels.cpu().numpy(), pred, difference]
 
+
     nrow = pred.shape[0]
     ncol = len(images)
     # Create a 5x3 subplot grid
@@ -307,6 +335,7 @@ def run(UNet):
             if i == ncol - 1:  # Use a different colormap for the difference plot
                 im = ax.imshow(img.transpose(1, 2, 0), cmap="viridis")
                 fig.colorbar(im, ax=ax, orientation='vertical', fraction=0.1)  # Add color bar to each subplot
+                
             else:
                 ax.imshow(img.transpose(1, 2, 0), cmap="gray")  # Transpose the image dimensions from [channel, height, width] to [height, width, channel]
                 if i == ncol - 2:
