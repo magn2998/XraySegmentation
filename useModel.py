@@ -1,21 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from functools import reduce
-from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 from torchvision.transforms.functional import crop
 from collections import defaultdict
-import torch.nn.functional as F
 import torch
-import torch.optim as optim
-from torch.optim import lr_scheduler
-import time
-import copy
-from sklearn.model_selection import train_test_split
-from imutils import paths
 import cv2
-import sys
-import os
 import Unet_old
 
 imageNo = "227"
