@@ -1,11 +1,16 @@
+# ------------------------------------------------------------------------------------------------ #
+# ------------------------------------------------------------------------------------------------ #
+# --------------- THIS CODE CONTAINS THE TRAINING LOOP WHEN TRAINING THE MODELS ------------------ #
+# ------------------------------------------------------------------------------------------------ #
+# ------------------------------------------------------------------------------------------------ #
+
+
 import matplotlib.pyplot as plt
 import numpy as np
-from functools import reduce
 from torch.utils.data import Dataset, DataLoader, Subset
 from torchvision import transforms
 from torchvision.transforms.functional import crop
 from collections import defaultdict
-import torch.nn.functional as F
 import torch.nn as nn
 import torch.nn as nn
 import torch
@@ -16,19 +21,13 @@ import copy
 from sklearn.model_selection import train_test_split
 from imutils import paths
 import cv2
-import sys
 import os
 import random
 
 # Global Variables
 batch_size = 5
-<<<<<<< HEAD
 IMG_HEIGHT = 16
 IMG_WIDTH = 16
-=======
-IMG_HEIGHT = 496
-IMG_WIDTH = 496
->>>>>>> 281b61b22c8ad74e3e72d8c3bbaee409268e8e96
 EPOCHS = 100
 NUM_SAMPLES = -1 # Set to -1 to disable
 
@@ -136,6 +135,7 @@ def get_data_loaders():
 
     return dataloaders
 
+# Determine the Dice Loss
 def dice_loss(pred, target):
     pred = pred.contiguous()
     target = target.contiguous()
@@ -146,6 +146,7 @@ def dice_loss(pred, target):
     dice = 2.0*intersection/total_sum
     return (1 - dice).mean()
 
+# Determine Intersection over Union loss - Not used in final version
 def IoU_loss(pred, target):
     pred = pred.contiguous()
     target = target.contiguous()
@@ -157,6 +158,7 @@ def IoU_loss(pred, target):
 
     return (1 - IoU).mean()
 
+# Determine the overall loss, which is depending on Dice and CCE 
 def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     cce = criterion(pred, target)
 
@@ -164,7 +166,7 @@ def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
     pred = SoftMaxFunc(pred)
 
     dice = dice_loss(pred, target)
-    # IoU = IoU_loss(pred, target)
+    # IoU = IoU_loss(pred, target) # Not used in final version
     # print(IoU)
 
     loss = cce * bce_weight + dice * (1 - bce_weight)
@@ -175,6 +177,7 @@ def calc_loss(pred, target, metrics, criterion, bce_weight=0.5):
 
     return loss
 
+# Calcualte Pixel Accuracy
 def calc_pixel_accuracy(pred, target, metrics):
 
     SoftMaxFunc = nn.Softmax2d()
@@ -192,7 +195,7 @@ def calc_pixel_accuracy(pred, target, metrics):
     metrics['pixelAcc'] += accuracy * target.size(0)
     return accuracy
 
-
+# Print the different metrics
 def print_metrics(metrics, epoch_samples, phase):
     outputs = []
     for k in metrics.keys():
@@ -200,7 +203,7 @@ def print_metrics(metrics, epoch_samples, phase):
 
     print("{}: {}".format(phase, ", ".join(outputs)))
 
-
+# Perform the actual training
 def train_model(model, optimizer, scheduler, num_epochs=25):
     dataloaders = get_data_loaders()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -288,8 +291,9 @@ def train_model(model, optimizer, scheduler, num_epochs=25):
     return model
 
 
+# Initiate the architecture and train the model
 def run(UNet):
-    num_class = 3
+    num_class = 3 # Classes = 3 as there are three segmentation classes
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Device Used: " + str(device))
 
@@ -301,7 +305,6 @@ def run(UNet):
 
     model = train_model(model, optimizer_ft, exp_lr_scheduler, num_epochs=EPOCHS)
 
-
     # Finish up and plot results
     model.eval()  # Set model to the evaluation mode
 
@@ -311,7 +314,7 @@ def run(UNet):
     inputs = inputs.to(device)
     labels = labels.to(device)
 
-    # Predict
+    # Predict and plot prediction
     pred = model(inputs)
     SoftMaxFunc = nn.Softmax2d()
     pred = SoftMaxFunc(pred)
@@ -348,5 +351,5 @@ def run(UNet):
     plt.savefig('./images/picture_training_' + filename + ".png")
 
 
-    # Save the model!
+    # Save the model for future use!
     torch.save(model.state_dict(), "./data/model_" + filename + ".pt")
