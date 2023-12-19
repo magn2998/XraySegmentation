@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from functools import reduce
 from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
+import torchvision
 from torchvision.transforms.functional import crop
 from collections import defaultdict
 import torch.nn.functional as F
@@ -74,9 +74,9 @@ def print_metrics(metrics, epoch_samples, phase):
 def crop800(image):
     return crop(image, 0, 0, IMG_HEIGHT, IMG_WIDTH)
 
-transformers = transforms.Compose([transforms.ToPILImage(),
-    transforms.Lambda(crop800),
-    transforms.ToTensor()])
+transformers = torchvision.transforms.Compose([torchvision.transforms.ToPILImage(),
+    torchvision.transforms.Lambda(crop800),
+    torchvision.transforms.ToTensor()])
 
 image = cv2.imread(imagePath, 0) # Read as grayscaled 
 image = transformers(image)
